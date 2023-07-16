@@ -336,6 +336,18 @@ class CharacterRenderer:
 
         self.avatar.paste(hat, (0, 0), hat)
 
+    def __render_background(self):
+        """Render the background of the avatar"""
+
+        bg = self.assets["background"]["night"].resize((192, 384), Image.NEAREST).copy()
+        bg.paste(
+            self.avatar.resize((128, 256), Image.NEAREST),
+            (36, 90),
+            self.avatar.resize((128, 256), Image.NEAREST),
+        )
+
+        bg.save("./test/bg.png")
+
     def render(self):
         self.__crop_farmer()
         self.__draw_pants()
@@ -345,5 +357,5 @@ class CharacterRenderer:
         self.__draw_hat()
         self.__draw_arms()
         self.avatar = self.avatar.resize((128, 256), Image.NEAREST)
-        # self.avatar.save("./test/avatar.png")
-        return self.avatar
+        self.avatar.save("./test/avatar.png")
+        # return self.avatar

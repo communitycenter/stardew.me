@@ -16,5 +16,9 @@ def loadAvatarAssets():
         "shoeColors": Image.open(os.path.join("assets", "shoeColors.png")),
         "pants": Image.open(os.path.join("assets", "pants.png")),
         "hats": Image.open(os.path.join("assets", "hats.png")),
+        "background": {
+            "day": Image.open(os.path.join("assets", "day.png")),
+            "night": Image.open(os.path.join("assets", "night.png")),
+        },
     }
     return assets
