@@ -342,7 +342,7 @@ class CharacterRenderer:
         bg = self.assets["background"]["night"].resize((192, 384), Image.NEAREST).copy()
         bg.paste(
             self.avatar.resize((128, 256), Image.NEAREST),
-            (36, 90),
+            (33, 90),
             self.avatar.resize((128, 256), Image.NEAREST),
         )
 

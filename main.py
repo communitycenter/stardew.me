@@ -25,7 +25,7 @@ app = FastAPI()
 
 @app.get("/generate_image")
 async def generate_image():
-    file_path = "./saves/android"
+    file_path = "./saves/clem"
     player = createPlayer(file_path)
     Avatar = CharacterRenderer(player)
     avatar = Avatar.render()
