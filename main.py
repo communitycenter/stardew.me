@@ -1,15 +1,17 @@
+import os
 import sys
-from fastapi import FastAPI
-import requests
-from io import BytesIO
+import uuid
 import json
 import boto3
 import uvicorn
-import uuid
-import os
+import requests
+
+from io import BytesIO
+from fastapi import FastAPI
 from dotenv import load_dotenv
 from lib.tools import createPlayer
-from lib.recolors import CharacterRenderer
+from lib.assets import loadAvatarAssets
+from lib.renderer import CharacterRenderer
 
 load_dotenv()
 
@@ -21,13 +23,14 @@ s3 = boto3.client(
 )
 
 app = FastAPI()
+assets = loadAvatarAssets()
 
 
 @app.get("/generate_image")
 async def generate_image():
     file_path = "./saves/clem"
     player = createPlayer(file_path)
-    Avatar = CharacterRenderer(player)
+    Avatar = CharacterRenderer(player, assets)
     avatar = Avatar.render()
 
     bytesToUpload = BytesIO()

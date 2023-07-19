@@ -5,8 +5,6 @@ from PIL.ImageOps import grayscale, colorize
 
 from typing import Tuple, List, Dict
 
-from .assets import loadAvatarAssets
-
 Color = Tuple[int, int, int, int]
 Offsets = Dict[str, Dict[int, List[int]]]
 # example for Offsets: {male: {260: [0,1,2]}}
@@ -14,8 +12,8 @@ Offsets = Dict[str, Dict[int, List[int]]]
 
 
 class CharacterRenderer:
-    def __init__(self, player: Dict[str, any]):
-        self.assets = loadAvatarAssets()
+    def __init__(self, player: Dict[str, any], assets):
+        self.assets = assets
         self.avatar = Image.new("RGBA", (16, 32), (0, 0, 0, 0))
         self.player = player
         self.gender = "male" if player["isMale"] else "female"
@@ -117,10 +115,10 @@ class CharacterRenderer:
     def __recolor_base(self):
         """Recolor the base image to match the player's skin, eye, shirt, and shoe color choices"""
         self.__apply_skin_color(self.player["skin"])
-        self.__apply_eye_color(self.player["eyes"])
+        self.__apply_eye_color(self.player["eyeColor"])
         self.__apply_sleeve_color(self.player["shirt"]["type"])
         self.__apply_shoe_color(self.player["shoes"])
-        self.base.save("./test/base.png")
+        # self.base.save("./test/base.png")
         return
 
     def __apply_skin_color(self, skin_index: int):
@@ -265,18 +263,61 @@ class CharacterRenderer:
         self.avatar.paste(shirt, (0, 0), shirt)
         return
 
+    def __get_hair(self) -> int:
+        """Decide which hair to draw on the farmer. Hats will influence this.
+
+        Returns:
+            int: The index of the hair to draw on the farmer.
+        """
+        # Reference: Farmer.getHair() in SDV source code
+        if not self.player["hat"]:
+            return self.player["hair"]["type"]
+
+        hairIndex = self.player["hair"]["type"]
+
+        if self.player["hat"]["hairDrawType"] == 2:
+            # Some hats skip drawing the hair (ex. Beanie)
+            return -1
+        elif self.player["hat"]["hairDrawType"] == 1:
+            match hairIndex:
+                case 50 | 51 | 52 | 53 | 54 | 55:
+                    return hairIndex
+                case 48:
+                    return 6
+                case 49:
+                    return 52
+                case 3:
+                    return 11
+                case 1 | 5 | 6 | 9 | 11 | 17 | 20 | 23 | 24 | 25 | 27 | 28 | 29 | 30 | 32 | 33 | 34 | 36 | 39 | 41 | 43 | 44 | 45 | 46 | 47:
+                    return hairIndex
+                case 18 | 19 | 21 | 31:
+                    return 23
+                case 42:
+                    return 46
+                # default case
+                case _:
+                    if hairIndex >= 16:
+                        return 30
+                    return 7
+        else:  # hairDrawType == 0 which I guess means we don't override the hair
+            return hairIndex
+
     def __draw_hair(self):
         """
         Draw the hair on top of the farmer.
         For now, this is just tinted, I'm not sure if SDV replaces the pixels like other stuff.
-        # ! [BUG]: The hair is slightly off tint (not a big deal), and black hair is completely black (big deal).
         """
+
+        hairIndex = self.__get_hair()
+        print(hairIndex)
+
+        # some hats skip drawing the hair
+        if hairIndex == -1:
+            return
 
         hair = self.__crop_image(
             self.assets["hair"],
-            self.player["hair"]
-            if self.player["hat"]["hair"] is None
-            else self.player["hat"]["hair"],
+            hairIndex,
             128,
             (16, 32),
             3,
@@ -322,8 +363,20 @@ class CharacterRenderer:
     def __draw_hat(self):
         """Draw the hat on top of the farmer"""
 
-        if not self.player["hat"]["type"]:
+        if not self.player["hat"]:
             return
+
+        # Different hats have different offsets, so we need to account for that
+        hairstyleHatOffsets = [0, 0, 0, 4, 0, 0, 3, 0, 4, 0, 0, 0, 0, 0, 0, 0]
+
+        displacement = [-2, -2 if self.player["isMale"] else -1]
+        # if ignoreHairstyleOffset is false, we need to account for the hairstyle offset
+        if not self.player["hat"]["ignoreHairstyleOffset"]:
+            displacement[1] += hairstyleHatOffsets[self.player["hair"]["type"] % 16] - (
+                0
+                if self.player["isMale"]
+                else 2  # no clue why females need to offset again
+            )
 
         hat = self.__crop_image(
             self.assets["hats"],
@@ -331,7 +384,7 @@ class CharacterRenderer:
             240,
             (20, 20),
             4,
-            (-2, -2),
+            displacement=displacement,
         )
 
         self.avatar.paste(hat, (0, 0), hat)
@@ -357,5 +410,5 @@ class CharacterRenderer:
         self.__draw_hat()
         self.__draw_arms()
         self.avatar = self.avatar.resize((128, 256), Image.NEAREST)
-        self.avatar.save("./test/avatar.png")
-        # return self.avatar
+        # self.avatar.save("./test/avatar.png")
+        return self.avatar

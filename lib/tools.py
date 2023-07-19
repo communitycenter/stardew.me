@@ -1,17 +1,6 @@
 import xmltodict
 
 
-def formatTime(milliseconds: int):
-    seconds = milliseconds // 1000
-    minutes = seconds // 60
-    hours = minutes // 60
-
-    seconds %= 60
-    minutes %= 60
-
-    return f"{hours:02}:{minutes:02}:{seconds:02}"
-
-
 def createPlayer(file):
     # use xmltodict to parse the xml file into a dict
     with open(file) as fd:
@@ -38,6 +27,16 @@ def createPlayer(file):
         int(doc["SaveGame"]["player"]["hairstyleColor"]["A"]),
     )
 
+    hat = None
+    if doc["SaveGame"]["player"].get("hat"):
+        hat = {
+            "type": int(doc["SaveGame"]["player"]["hat"]["which"]),
+            "hairDrawType": int(doc["SaveGame"]["player"]["hat"]["hairDrawType"]),
+            "ignoreHairstyleOffset": True
+            if doc["SaveGame"]["player"]["hat"].get("ignoreHairstyleOffset") == "true"
+            else False,
+        }
+
     player = {
         "isMale": doc["SaveGame"]["player"]["isMale"] == "true",
         "hair": {
@@ -46,14 +45,7 @@ def createPlayer(file):
         },
         "skin": int(doc["SaveGame"]["player"]["skin"]),
         "accessory": int(doc["SaveGame"]["player"]["accessory"]),
-        "hat": {
-            "type": int(doc["SaveGame"]["player"]["hat"].get("which"))
-            if doc["SaveGame"]["player"].get("hat")
-            else None,
-            "hair": int(doc["SaveGame"]["player"]["hat"].get("hairDrawType"))
-            if doc["SaveGame"]["player"].get("hat")
-            else None,
-        },
+        "hat": hat,
         "pants": {
             "type": int(doc["SaveGame"]["player"]["pantsItem"]["indexInTileSheet"]),
             "color": pantsColor,
@@ -62,7 +54,7 @@ def createPlayer(file):
             "type": int(doc["SaveGame"]["player"]["shirtItem"]["indexInTileSheet"])
         },
         "shoes": int(doc["SaveGame"]["player"]["shoes"]),
-        "eyes": eyeColor,
+        "eyeColor": eyeColor,
     }
 
     return player
