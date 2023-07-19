@@ -1,15 +1,13 @@
 import os
-import sys
 import uuid
-import json
 import boto3
 import uvicorn
-import requests
 
 from io import BytesIO
 from fastapi import FastAPI
 from dotenv import load_dotenv
-from lib.tools import createPlayer
+
+from lib.models import Player
 from lib.assets import loadAvatarAssets
 from lib.renderer import CharacterRenderer
 
@@ -26,11 +24,12 @@ app = FastAPI()
 assets = loadAvatarAssets()
 
 
-@app.get("/generate_image")
-async def generate_image():
-    file_path = "./saves/clem"
-    player = createPlayer(file_path)
-    Avatar = CharacterRenderer(player, assets)
+@app.post("/generate_image")
+async def generate_image(player: Player):
+    # BaseModels are not subscriptable so we need to convert to a dict
+    player_dict = player.model_dump()
+
+    Avatar = CharacterRenderer(player_dict, assets)
     avatar = Avatar.render()
 
     bytesToUpload = BytesIO()
@@ -53,6 +52,9 @@ async def generate_image():
             "success": True,
             "url": f"{os.environ.get('r2_pub')}{uuidKey}",
         }
+
+    # avatar.save("test.png")
+    return {"success": True}
 
 
 if __name__ == "__main__":

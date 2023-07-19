@@ -309,7 +309,6 @@ class CharacterRenderer:
         """
 
         hairIndex = self.__get_hair()
-        print(hairIndex)
 
         # some hats skip drawing the hair
         if hairIndex == -1:
