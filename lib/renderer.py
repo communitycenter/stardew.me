@@ -351,7 +351,7 @@ class CharacterRenderer:
            # Source: https://stardewcommunitywiki.com/The_Player
            # I counted these sprites and there's really only 18 but I'm just gonna follow the wiki.
            # Love, Jack
-           accessoryID = 20
+           accessoryID = -1
 
 
         accessory = self.__crop_image(
@@ -374,6 +374,11 @@ class CharacterRenderer:
 
         if not self.player["hat"]:
             return
+        
+        hatID = self.player["hat"]['type']
+        
+        if self.player["hat"]["type"] < 0 or self.player["hat"]["type"] > 93:
+            return
 
         # Different hats have different offsets, so we need to account for that
         hairstyleHatOffsets = [0, 0, 0, 4, 0, 0, 3, 0, 4, 0, 0, 0, 0, 0, 0, 0]
@@ -389,7 +394,7 @@ class CharacterRenderer:
 
         hat = self.__crop_image(
             self.assets["hats"],
-            self.player["hat"]["type"],
+            hatID,
             240,
             (20, 20),
             4,
