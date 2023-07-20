@@ -113,6 +113,7 @@ class CharacterRenderer:
         return pixel_indices
 
     def __recolor_base(self):
+        print(self.player['shirt'])
         """Recolor the base image to match the player's skin, eye, shirt, and shoe color choices"""
         self.__apply_skin_color(self.player["skin"])
         self.__apply_eye_color(self.player["eyeColor"])
@@ -344,9 +345,18 @@ class CharacterRenderer:
 
     def __draw_accessories(self):
         """Draw the accessories on top of the farmer"""
+
+        accessoryID = self.player["accessory"]
+        if self.player["accessory"] < 0 or self.player["accessory"] > 20:
+           # Source: https://stardewcommunitywiki.com/The_Player
+           # I counted these sprites and there's really only 18 but I'm just gonna follow the wiki.
+           # Love, Jack
+           accessoryID = 20
+
+
         accessory = self.__crop_image(
             self.assets["accessories"],
-            self.player["accessory"],
+            accessoryID,
             128,
             (16, 16),
             2,
@@ -354,7 +364,7 @@ class CharacterRenderer:
         )
 
         # If one of the 5 facial hair accessories, tint it
-        if self.player["accessory"] <= 5:
+        if accessoryID <= 5:
             accessory = self.__tint_image(accessory, self.player["hair"]["color"])
 
         self.avatar.paste(accessory, (0, 0), accessory)
@@ -409,5 +419,5 @@ class CharacterRenderer:
         self.__draw_hat()
         self.__draw_arms()
         self.avatar = self.avatar.resize((128, 256), Image.NEAREST)
-        # self.avatar.save("./test/avatar.png")
-        return self.avatar
+        self.avatar.save("./test/avatar.png")
+        # return self.avatar
