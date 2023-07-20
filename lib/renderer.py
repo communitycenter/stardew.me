@@ -261,6 +261,8 @@ class CharacterRenderer:
         # There are 55 IDs that are dyeable - this number was gathered from handcounting in the sprite sheet.
         # I'm going to need to figure out how to actually get the dyeable shirt ID and tint it, because
         # wihout that, the function just returns a blank shirt. (ex, shirt ID 128 is blank)
+        # One option for a solution would be to manually count which IDs are dyeable, and then
+        # create an array of those IDs and find them in the sprite sheet.
 
         # TODO: Validate the shirt ID
         # NOTE: Here in lies another issue with the shirt tinting - the shirt ID's are not consistent in
