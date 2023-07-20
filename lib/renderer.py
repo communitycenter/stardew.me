@@ -113,7 +113,7 @@ class CharacterRenderer:
         return pixel_indices
 
     def __recolor_base(self):
-        print(self.player['shirt'])
+        print(self.player["shirt"])
         """Recolor the base image to match the player's skin, eye, shirt, and shoe color choices"""
         self.__apply_skin_color(self.player["skin"])
         self.__apply_eye_color(self.player["eyeColor"])
@@ -251,7 +251,6 @@ class CharacterRenderer:
         return resized
 
     def __draw_shirt(self):
-
         # TODO: Tint the shirt
         # NOTE: Shirt ID's 0-127 are the shirts that are available in the Stardew Valley picker.
         # Past 127 are custom shirts that can be purchased, or worse, dyed.
@@ -336,13 +335,20 @@ class CharacterRenderer:
         if hairIndex == -1:
             return
 
+        # StardewValley.FarmerRenderer.cs
+        # If I'm reading the code correctly (which its very possible I'm not), hair indexes above 16 don't
+        # need to be offset by 1. I'm not sure why but we ball.
+        displacement = [0, 0] if hairIndex >= 16 else [0, 1]
+        if not self.player["isMale"]:
+            displacement[1] += 1
+
         hair = self.__crop_image(
             self.assets["hair"],
             hairIndex,
             128,
             (16, 32),
             3,
-            (0, 1),
+            displacement=displacement,
         )
 
         hair = self.__tint_image(hair, self.player["hair"]["color"])
@@ -370,11 +376,10 @@ class CharacterRenderer:
 
         accessoryID = self.player["accessory"]
         if self.player["accessory"] < 0 or self.player["accessory"] > 20:
-           # Source: https://stardewcommunitywiki.com/The_Player
-           # I counted these sprites and there's really only 18 but I'm just gonna follow the wiki.
-           # Love, Jack
-           accessoryID = -1
-
+            # Source: https://stardewcommunitywiki.com/The_Player
+            # I counted these sprites and there's really only 18 but I'm just gonna follow the wiki.
+            # Love, Jack
+            accessoryID = -1
 
         accessory = self.__crop_image(
             self.assets["accessories"],
@@ -396,9 +401,9 @@ class CharacterRenderer:
 
         if not self.player["hat"]:
             return
-        
-        hatID = self.player["hat"]['type']
-        
+
+        hatID = self.player["hat"]["type"]
+
         if self.player["hat"]["type"] < 0 or self.player["hat"]["type"] > 93:
             return
 

@@ -37,6 +37,16 @@ def createPlayer(file):
             else False,
         }
 
+    if doc["SaveGame"]["player"].get("shirtItem"):
+        shirt = {
+            "type": int(doc["SaveGame"]["player"]["shirtItem"]["indexInTileSheet"])
+        }
+    else:
+        if doc["SaveGame"]["player"]["isMale"] == "true":
+            shirt = {"type": 209}
+        else:
+            shirt = {"type": 41}
+
     player = {
         "isMale": doc["SaveGame"]["player"]["isMale"] == "true",
         "hair": {
@@ -50,11 +60,11 @@ def createPlayer(file):
             "type": int(doc["SaveGame"]["player"]["pantsItem"]["indexInTileSheet"]),
             "color": pantsColor,
         },
-        "shirt": {
-            "type": int(doc["SaveGame"]["player"]["shirtItem"]["indexInTileSheet"])
-        },
+        "shirt": shirt,
         "shoes": int(doc["SaveGame"]["player"]["shoes"]),
         "eyeColor": eyeColor,
     }
+
+    print(player)
 
     return player
