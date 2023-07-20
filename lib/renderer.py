@@ -251,6 +251,25 @@ class CharacterRenderer:
         return resized
 
     def __draw_shirt(self):
+
+        # TODO: Tint the shirt
+        # NOTE: Shirt ID's 0-127 are the shirts that are available in the Stardew Valley picker.
+        # Past 127 are custom shirts that can be purchased, or worse, dyed.
+        # In the shirts.png asset, counting down from 128, are shirts that are missing - and on
+        # the right hand side, have a white asset. These are the custom shirts that have a
+        # customizable color/portion that is dyeable.
+        # There are 55 IDs that are dyeable - this number was gathered from handcounting in the sprite sheet.
+        # I'm going to need to figure out how to actually get the dyeable shirt ID and tint it, because
+        # wihout that, the function just returns a blank shirt. (ex, shirt ID 128 is blank)
+
+        # TODO: Validate the shirt ID
+        # NOTE: Here in lies another issue with the shirt tinting - the shirt ID's are not consistent in
+        # the sprite sheet, which makes it a bit impossible to validate the shirt ID. For example, shirt
+        # 128, while a valid shirt, is not in the sprite sheet and needs to be tinted.
+        # A ideal validation range would be 0-299, which is the sprite sheet range for shirts.
+        # But because tinted shirts have a different index on the sprite sheet, it might present a validation
+        # issue. Solve the above issue first, and figure this out after.
+
         """Draw the shirt on top of the farmer"""
         displacement = (4, 15) if self.gender == "male" else (4, 16)
         shirt = self.__crop_image(
@@ -339,6 +358,7 @@ class CharacterRenderer:
         pants = self.assets["pants"].crop(
             (pants_x, pants_y, pants_x + 192, pants_y + 688)
         )
+
         pants.crop((0, 0, 16, 32))
         pants = self.__tint_image(pants, self.player["pants"]["color"])
         self.avatar.paste(pants, (0, 0), pants)
