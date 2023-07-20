@@ -20,7 +20,7 @@ class Pants(BaseModel):
 
 class Shirt(BaseModel):
     type: int
-    color: Tuple[int, int, int, int]
+    color: Optional[Tuple[int, int, int, int]]
 
 
 class Player(BaseModel):
