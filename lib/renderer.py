@@ -356,7 +356,7 @@ class CharacterRenderer:
             299,
         ]
 
-        shirtID = 210
+        shirtID = 129
 
         displacement = (4, 15) if self.gender == "male" else (4, 16)
 
@@ -373,28 +373,6 @@ class CharacterRenderer:
             )
             # shirt = self.__tint_image(shirt)
             self.avatar.paste(shirt, (0, 0), shirt)
-            return
-
-        if shirtID in dyable_overlay_shirts:
-            spritesheet = self.__get_shirt_sprite(True, True)
-            shirt = self.__crop_image(
-                spritesheet[0],
-                shirtID,
-                128,
-                (8, 8),
-                4,
-                displacement,
-            )
-            self.avatar.paste(shirt, (0, 0), shirt)
-            overlay = self.__crop_image(
-                spritesheet[1],
-                shirtID,
-                128,
-                (8, 8),
-                4,
-                displacement,
-            )
-            self.avatar.paste(overlay, (0, 0), overlay)
             return
 
         else:
