@@ -158,6 +158,26 @@ class CharacterRenderer:
         return
 
     def __apply_sleeve_color(self, shirt_index: int):
+        """Replace the stock sleeve color with the player's chosen shirt color or skin color if sleeveless"""
+        if shirt_index + 1000 in self.sleeveless_shirts:
+            # We're replacing the sleeves with the skin color instead of the shirt color
+            # basically a reimplementation of self.__apply_skin_color()
+            skinColors = self.assets["skinColors"]
+            skin_index = self.player["skin"]
+            if (skin_index < 0) or (skin_index > skinColors.height - 1):
+                skin_index = 0
+
+            skinColorsData = list(skinColors.getdata())
+            darkest = skinColorsData[skin_index * 3 % (skinColors.height * 3)]
+            medium = skinColorsData[skin_index * 3 % (skinColors.height * 3) + 1]
+            lightest = skinColorsData[skin_index * 3 % (skinColors.height * 3) + 2]
+
+            self.__swap_color(256, darkest)
+            self.__swap_color(257, medium)
+            self.__swap_color(258, lightest)
+            return
+
+        # not sleeveless, so we're replacing the sleeves with the shirt color
         shirtsTexture = self.assets["shirts"].convert("RGBA")
         # crop out 128x608 section of the shirts texture, idk what the right side is for
         shirtsTexture = shirtsTexture.crop((0, 0, 128, 608))
@@ -265,11 +285,11 @@ class CharacterRenderer:
         """Draw the shirt on top of the farmer"""
         displacement = (4, 15) if self.gender == "male" else (4, 16)
 
-        # TODO: handle sleeveless shirts
+        shirtIndex = self.player["shirt"]["type"]
 
         shirt = self.__crop_image(
             self.assets["shirts"],
-            self.player["shirt"]["type"],
+            shirtIndex,
             128,
             (8, 8),
             4,
@@ -282,7 +302,7 @@ class CharacterRenderer:
             # the dyeable = True flag moves the x index by 128px to get the dyeable mask from sprite sheet
             dyeable_shirt = self.__crop_image(
                 self.assets["shirts"],
-                self.player["shirt"]["type"],
+                shirtIndex,
                 128,
                 (8, 8),
                 4,
