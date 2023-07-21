@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 from lib.models import Player
 from lib.assets import loadAvatarAssets
 from lib.renderer import CharacterRenderer
+from lib.tools import get_sleeveless_shirts
 
 load_dotenv()
 
@@ -22,6 +23,7 @@ s3 = boto3.client(
 
 app = FastAPI()
 assets = loadAvatarAssets()
+sleeveless_shirts = get_sleeveless_shirts()
 
 
 @app.post("/generate_image")
@@ -29,7 +31,7 @@ async def generate_image(player: Player):
     # BaseModels are not subscriptable so we need to convert to a dict
     player_dict = player.model_dump()
 
-    Avatar = CharacterRenderer(player_dict, assets)
+    Avatar = CharacterRenderer(player_dict, assets, sleeveless_shirts)
     avatar = Avatar.render()
 
     bytesToUpload = BytesIO()
