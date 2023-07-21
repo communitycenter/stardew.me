@@ -226,6 +226,7 @@ class CharacterRenderer:
         object_size: Tuple[int, int],
         group_size: int,
         displacement: Tuple[int, int] = (0, 0),
+        dyeable: bool = False,
     ):
         """
         Crop a single object from a spritesheet.
@@ -238,12 +239,17 @@ class CharacterRenderer:
             object_size (Tuple[int, int]): the size of the object to crop
             group_size (int): the number of objects grouped together in the spritesheet
             displacement (Tuple[int, int], optional): the displacement of the object in the spritesheet. Defaults to (0, 0).
+            dyeable (bool, optional): whether or not the object is dyeable. Defaults to False.
 
         Returns:
             Image: the 16x32 image of the single object, placed based on the displacement
         """
         x = (index * object_size[0]) % width
         y = (index * object_size[0] // width) * (object_size[1] * group_size)
+
+        if dyeable:
+            # if the object is dyeable, the dyeable mask is 128px to the right of the object
+            x += 128
 
         image = offset(img, -x, -y).crop((0, 0, object_size[0], object_size[1]))
 
@@ -252,25 +258,9 @@ class CharacterRenderer:
         return resized
 
     def __draw_shirt(self):
-        # TODO: Tint the shirt
-        # NOTE: Shirt ID's 0-127 are the shirts that are available in the Stardew Valley picker.
-        # Past 127 are custom shirts that can be purchased, or worse, dyed.
-        # In the shirts.png asset, counting down from 128, are shirts that are missing - and on
-        # the right hand side, have a white asset. These are the custom shirts that have a
-        # customizable color/portion that is dyeable.
-        # There are 55 IDs that are dyeable - this number was gathered from handcounting in the sprite sheet.
-        # I'm going to need to figure out how to actually get the dyeable shirt ID and tint it, because
-        # wihout that, the function just returns a blank shirt. (ex, shirt ID 128 is blank)
-        # One option for a solution would be to manually count which IDs are dyeable, and then
-        # create an array of those IDs and find them in the sprite sheet.
-
         # TODO: Validate the shirt ID
-        # NOTE: Here in lies another issue with the shirt tinting - the shirt ID's are not consistent in
-        # the sprite sheet, which makes it a bit impossible to validate the shirt ID. For example, shirt
-        # 128, while a valid shirt, is not in the sprite sheet and needs to be tinted.
-        # A ideal validation range would be 0-299, which is the sprite sheet range for shirts.
-        # But because tinted shirts have a different index on the sprite sheet, it might present a validation
-        # issue. Solve the above issue first, and figure this out after.
+        # We could do this on the POST request or here but then we'd need to pass in the ClothingInformation.json
+        # Iterate through all the keys, everything in the 1000s is the shirt IDs, everything else is pants
 
         """Draw the shirt on top of the farmer"""
         displacement = (4, 15) if self.gender == "male" else (4, 16)
@@ -289,16 +279,20 @@ class CharacterRenderer:
 
         # check if shirt is dyeable
         if self.player["shirt"]["dyeable"]:
-            # now we're going to need to move right by 128 pixels and use the full shirt sprite sheet.
+            # the dyeable = True flag moves the x index by 128px to get the dyeable mask from sprite sheet
             dyeable_shirt = self.__crop_image(
                 self.assets["shirts"],
                 self.player["shirt"]["type"],
-                256,
+                128,
                 (8, 8),
                 4,
                 displacement=displacement,
+                dyeable=True,
             )
-            dyeable_shirt.save("./dyeable_test.png")
+            dyeable_shirt = self.__tint_image(
+                dyeable_shirt, self.player["shirt"]["color"]
+            )
+            self.avatar.paste(dyeable_shirt, (0, 0), dyeable_shirt)
 
         return
 
@@ -469,5 +463,5 @@ class CharacterRenderer:
         self.__draw_hat()
         self.__draw_arms()
         self.avatar = self.avatar.resize((128, 256), Image.NEAREST)
-        self.avatar.save("./test/avatar.png")
-        # return self.avatar
+        # self.avatar.save("./avatar.png")
+        return self.avatar
