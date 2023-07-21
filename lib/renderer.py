@@ -369,6 +369,7 @@ class CharacterRenderer:
 
     def __draw_pants(self):
         """Draw the pants on top of the farmer."""
+        # TODO: understand wtf going on here
         pants_x = self.player["pants"]["type"] % 10 * 192
         pants_y = self.player["pants"]["type"] // 10 * 688
 
@@ -380,7 +381,9 @@ class CharacterRenderer:
         )
 
         pants.crop((0, 0, 16, 32))
-        pants = self.__tint_image(pants, self.player["pants"]["color"])
+        if self.player["pants"]["dyeable"]:
+            pants = self.__tint_image(pants, self.player["pants"]["color"])
+
         self.avatar.paste(pants, (0, 0), pants)
 
     def __draw_accessories(self):
