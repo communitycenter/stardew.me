@@ -1,4 +1,8 @@
+import os
+import json
 import xmltodict
+
+from typing import Set
 
 
 def createPlayer(file):
@@ -14,12 +18,7 @@ def createPlayer(file):
         int(newEyeColor["B"]),
         int(newEyeColor["A"]),
     )
-    pantsColor = (
-        int(doc["SaveGame"]["player"]["pantsColor"]["R"]),
-        int(doc["SaveGame"]["player"]["pantsColor"]["G"]),
-        int(doc["SaveGame"]["player"]["pantsColor"]["B"]),
-        int(doc["SaveGame"]["player"]["pantsColor"]["A"]),
-    )
+
     hairColor = (
         int(doc["SaveGame"]["player"]["hairstyleColor"]["R"]),
         int(doc["SaveGame"]["player"]["hairstyleColor"]["G"]),
@@ -27,6 +26,7 @@ def createPlayer(file):
         int(doc["SaveGame"]["player"]["hairstyleColor"]["A"]),
     )
 
+    # -------------------------- check if player has hat ------------------------- #
     hat = None
     if doc["SaveGame"]["player"].get("hat"):
         hat = {
@@ -37,15 +37,44 @@ def createPlayer(file):
             else False,
         }
 
+    # ------------------------ check if player has a shirt ----------------------- #
     if doc["SaveGame"]["player"].get("shirtItem"):
+        shirtColor = (
+            int(doc["SaveGame"]["player"]["shirtItem"]["clothesColor"]["R"]),
+            int(doc["SaveGame"]["player"]["shirtItem"]["clothesColor"]["G"]),
+            int(doc["SaveGame"]["player"]["shirtItem"]["clothesColor"]["B"]),
+            int(doc["SaveGame"]["player"]["shirtItem"]["clothesColor"]["A"]),
+        )
         shirt = {
-            "type": int(doc["SaveGame"]["player"]["shirtItem"]["indexInTileSheet"])
+            "type": int(doc["SaveGame"]["player"]["shirtItem"]["indexInTileSheet"]),
+            "dyeable": True
+            if doc["SaveGame"]["player"]["shirtItem"]["dyeable"] == "true"
+            else False,
+            "color": shirtColor,
         }
-    else:
+    else:  # default shirt
         if doc["SaveGame"]["player"]["isMale"] == "true":
-            shirt = {"type": 209}
+            shirt = {"type": 209, "dyeable": False, "color": (0, 0, 0, 0)}
         else:
-            shirt = {"type": 41}
+            shirt = {"type": 41, "dyeable": False, "color": (0, 0, 0, 0)}
+
+    # ------------------------- check if player has pants ------------------------ #
+    if doc["SaveGame"]["player"].get("pantsItem"):
+        pantsColor = (
+            int(doc["SaveGame"]["player"]["pantsItem"]["clothesColor"]["R"]),
+            int(doc["SaveGame"]["player"]["pantsItem"]["clothesColor"]["G"]),
+            int(doc["SaveGame"]["player"]["pantsItem"]["clothesColor"]["B"]),
+            int(doc["SaveGame"]["player"]["pantsItem"]["clothesColor"]["A"]),
+        )
+        pants = {
+            "type": int(doc["SaveGame"]["player"]["pantsItem"]["indexInTileSheet"]),
+            "dyeable": True
+            if doc["SaveGame"]["player"]["pantsItem"]["dyeable"] == "true"
+            else False,
+            "color": pantsColor,
+        }
+    else:  # default pants
+        pants = {"type": 14, "dyeable": False, "color": (0, 0, 0, 0)}
 
     player = {
         "isMale": doc["SaveGame"]["player"]["isMale"] == "true",
@@ -56,15 +85,31 @@ def createPlayer(file):
         "skin": int(doc["SaveGame"]["player"]["skin"]),
         "accessory": int(doc["SaveGame"]["player"]["accessory"]),
         "hat": hat,
-        "pants": {
-            "type": int(doc["SaveGame"]["player"]["pantsItem"]["indexInTileSheet"]),
-            "color": pantsColor,
-        },
+        "pants": pants,
         "shirt": shirt,
         "shoes": int(doc["SaveGame"]["player"]["shoes"]),
         "eyeColor": eyeColor,
     }
 
-    print(player)
-
     return player
+
+
+def get_sleeveless_shirts() -> Set[int]:
+    """Get a set of shirt IDs that are sleeveless
+
+    Returns:
+        Set[int]: A set of shirt IDs that are sleeveless
+    """
+    clothing_info_path = os.path.join("data", "ClothingInformation.json")
+    with open(clothing_info_path, "r") as f:
+        clothing_info = json.load(f)
+
+    sleeveless_shirts = set()
+
+    for shirt_id, info in clothing_info.items():
+        info_split = info.split("/")
+
+        if len(info_split) >= 10 and info_split[9] == "Sleeveless":
+            sleeveless_shirts.add(int(shirt_id))
+
+    return sleeveless_shirts

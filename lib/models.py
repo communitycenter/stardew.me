@@ -15,11 +15,13 @@ class Hair(BaseModel):
 
 class Pants(BaseModel):
     type: int
+    dyeable: bool
     color: Tuple[int, int, int, int]
 
 
 class Shirt(BaseModel):
     type: int
+    dyeable: bool
     color: Optional[Tuple[int, int, int, int]]
 
 
@@ -29,7 +31,7 @@ class Player(BaseModel):
     skin: int
     accessory: int
     hat: Optional[Hat] = None
-    pants: Pants
-    shirt: Shirt
+    pants: Pants  # TODO: make this optional?
+    shirt: Shirt  # TODO: make this optional?
     shoes: int
     eyeColor: Tuple[int, int, int, int]

@@ -3,7 +3,7 @@ from PIL import Image
 from PIL.ImageChops import offset
 from PIL.ImageOps import grayscale, colorize
 
-from typing import Tuple, List, Dict
+from typing import Tuple, List, Dict, Set
 
 Color = Tuple[int, int, int, int]
 Offsets = Dict[str, Dict[int, List[int]]]
@@ -12,8 +12,9 @@ Offsets = Dict[str, Dict[int, List[int]]]
 
 
 class CharacterRenderer:
-    def __init__(self, player: Dict[str, any], assets):
+    def __init__(self, player: Dict[str, any], assets, sleeveless_shirts: Set[int]):
         self.assets = assets
+        self.sleeveless_shirts = sleeveless_shirts
         self.avatar = Image.new("RGBA", (16, 32), (0, 0, 0, 0))
         self.player = player
         self.gender = "male" if player["isMale"] else "female"
@@ -273,15 +274,32 @@ class CharacterRenderer:
 
         """Draw the shirt on top of the farmer"""
         displacement = (4, 15) if self.gender == "male" else (4, 16)
+
+        # TODO: handle sleeveless shirts
+
         shirt = self.__crop_image(
             self.assets["shirts"],
             self.player["shirt"]["type"],
             128,
             (8, 8),
             4,
-            displacement,
+            displacement=displacement,
         )
         self.avatar.paste(shirt, (0, 0), shirt)
+
+        # check if shirt is dyeable
+        if self.player["shirt"]["dyeable"]:
+            # now we're going to need to move right by 128 pixels and use the full shirt sprite sheet.
+            dyeable_shirt = self.__crop_image(
+                self.assets["shirts"],
+                self.player["shirt"]["type"],
+                256,
+                (8, 8),
+                4,
+                displacement=displacement,
+            )
+            dyeable_shirt.save("./dyeable_test.png")
+
         return
 
     def __get_hair(self) -> int:
