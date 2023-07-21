@@ -15,4 +15,4 @@ if __name__ == "__main__":
     player = createPlayer(file_path)
     Avatar = CharacterRenderer(player, assets)
     avatar = Avatar.render()
-    avatar.save("test/test.png")
+    avatar.save("test.png")

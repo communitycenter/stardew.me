@@ -3,7 +3,7 @@ from PIL import Image
 from PIL.ImageChops import offset
 from PIL.ImageOps import grayscale, colorize
 
-from typing import Optional, Tuple, List, Dict
+from typing import Tuple, List, Dict
 
 Color = Tuple[int, int, int, int]
 Offsets = Dict[str, Dict[int, List[int]]]
@@ -250,23 +250,6 @@ class CharacterRenderer:
         resized.paste(image, displacement, image)
         return resized
 
-    def __get_shirt_sprite(self, dyable: bool = False, overlay: Optional[bool] = False):
-        # Open the input image
-        img = self.assets["shirts"]
-
-        # Define the crop coordinates and dimensions
-        left = 0 if not dyable else 128
-        top = 0
-        right = left + 128
-        bottom = top + 608
-
-        if not dyable and not overlay:
-            return img.crop((0, 0, 128, bottom))
-        if dyable and not overlay:
-            return img.crop((128, 0, 256, bottom))
-        if dyable and overlay:
-            return (img.crop((0, 0, 128, bottom)), img.crop((128, 0, 256, bottom)))
-
     def __draw_shirt(self):
         # TODO: Tint the shirt
         # NOTE: Shirt ID's 0-127 are the shirts that are available in the Stardew Valley picker.
@@ -289,103 +272,17 @@ class CharacterRenderer:
         # issue. Solve the above issue first, and figure this out after.
 
         """Draw the shirt on top of the farmer"""
-
-        dyable_shirts = [
-            128,
-            129,
-            130,
-            132,
-            133,
-            134,
-            136,
-            137,
-            139,
-            140,
-            141,
-            142,
-            143,
-            152,
-            153,
-            154,
-            176,
-            177,
-            178,
-            191,
-        ]
-
-        dyable_overlay_shirts = [
-            123,  # tuxedo shirt - tie is dyable
-            158,
-            159,
-            166,
-            173,
-            174,
-            175,
-            194,  # triple lined shirt - middle lines is dyable
-            196,
-            200,  # star shirt - star is dyable
-            208,
-            209,
-            210,  # heart shirt - heart is dyable
-            216,
-            217,
-            218,
-            220,
-            222,
-            223,
-            224,
-            248,
-            259,
-            261,
-            262,
-            263,
-            270,
-            271,
-            272,  # black polka dot
-            273,  # white polka dot
-            277,
-            278,
-            279,
-            280,
-            281,
-            282,
-            283,
-            284,
-            288,
-            289,
-            299,
-        ]
-
-        shirtID = 129
-
         displacement = (4, 15) if self.gender == "male" else (4, 16)
-
-        if shirtID in dyable_shirts:
-            spritesheet = self.__get_shirt_sprite(True)
-
-            shirt = self.__crop_image(
-                spritesheet,
-                shirtID,
-                128,
-                (8, 8),
-                4,
-                displacement,
-            )
-            # shirt = self.__tint_image(shirt)
-            self.avatar.paste(shirt, (0, 0), shirt)
-            return
-
-        else:
-            shirt = self.__crop_image(
-                self.assets["shirts"],
-                self.player["shirt"]["type"],
-                128,
-                (8, 8),
-                4,
-                displacement,
-            )
-            self.avatar.paste(shirt, (0, 0), shirt)
-            return
+        shirt = self.__crop_image(
+            self.assets["shirts"],
+            self.player["shirt"]["type"],
+            128,
+            (8, 8),
+            4,
+            displacement,
+        )
+        self.avatar.paste(shirt, (0, 0), shirt)
+        return
 
     def __get_hair(self) -> int:
         """Decide which hair to draw on the farmer. Hats will influence this.
@@ -554,5 +451,5 @@ class CharacterRenderer:
         self.__draw_hat()
         self.__draw_arms()
         self.avatar = self.avatar.resize((128, 256), Image.NEAREST)
-        # self.avatar.save("./test/avatar.png")
-        return self.avatar
+        self.avatar.save("./test/avatar.png")
+        # return self.avatar
