@@ -1,6 +1,8 @@
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import GitHubButton from './GitHubButton'
+import DiscordButton from './DiscordButton'
 
 const navigation = [
   { name: 'Home', href: '#', current: true },
@@ -8,8 +10,8 @@ const navigation = [
 ]
 
 const extLinks = [
-  { name: 'GitHub', href: '#', bg: 'bg-[#f1f5f9]', text: 'text-gray-900', hover: 'hover:bg-[#f7f9fa]' },
-  { name: 'Discord', href: '#', bg: 'bg-gray-900', text: 'text-white', hover: 'hover:bg-gray-700' },
+  { name: 'GitHub', href: '#', variant: 'secondary' },
+  { name: 'Discord', href: '#', variant: '' },
 ]
 
 function classNames(...classes) {
@@ -62,15 +64,8 @@ export default function Header() {
               </div>
               <div className="hidden sm:ml-6 sm:block">
                 <div className="flex space-x-2">
-                {extLinks.map((item) => (
-                  <a
-                    key={item.name}
-                    href={item.href}
-                    className={`rounded-md px-3 py-2 text-sm font-medium ${item.bg} ${item.text} ${item.hover} transition ease-in-out duration-150`}
-                  >
-                    {item.name}
-                  </a>
-                ))}
+                  <GitHubButton />
+                  <DiscordButton />
                 </div>
               </div>
             </div>
