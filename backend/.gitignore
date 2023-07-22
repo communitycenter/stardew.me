@@ -160,6 +160,7 @@ cython_debug/
 
 .vscode
 test/*.png
+test.png
 
 # sorry y'all
 assets/
