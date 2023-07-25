@@ -5,6 +5,7 @@ import uvicorn
 
 from io import BytesIO
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
 from lib.models import Player
@@ -22,6 +23,15 @@ s3 = boto3.client(
 )
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 assets = loadAvatarAssets()
 sleeveless_shirts = get_sleeveless_shirts()
 

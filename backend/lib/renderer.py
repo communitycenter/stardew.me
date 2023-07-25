@@ -114,7 +114,6 @@ class CharacterRenderer:
         return pixel_indices
 
     def __recolor_base(self):
-        print(self.player["shirt"])
         """Recolor the base image to match the player's skin, eye, shirt, and shoe color choices"""
         self.__apply_skin_color(self.player["skin"])
         self.__apply_eye_color(self.player["eyeColor"])
