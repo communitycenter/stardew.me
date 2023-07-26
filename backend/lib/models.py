@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Tuple, Optional
+from typing import Tuple, Optional, Literal
 
 
 class Hat(BaseModel):
@@ -35,3 +35,4 @@ class Player(BaseModel):
     shirt: Shirt  # TODO: make this optional?
     shoes: int
     eyeColor: Tuple[int, int, int, int]
+    background: Literal[None, "day", "night"]

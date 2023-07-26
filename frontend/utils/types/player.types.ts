@@ -34,4 +34,5 @@ export interface Player {
   shirt: Shirt;
   shoes: number;
   eyeColor: Color;
+  background?: "day" | "night" | null;
 }

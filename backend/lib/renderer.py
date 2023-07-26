@@ -467,14 +467,17 @@ class CharacterRenderer:
     def __render_background(self):
         """Render the background of the avatar"""
 
-        bg = self.assets["background"]["night"].resize((192, 384), Image.NEAREST).copy()
+        bg = (
+            self.assets["background"][self.player.get("background")]
+            .resize((192, 384), Image.NEAREST)
+            .copy()
+        )
         bg.paste(
             self.avatar.resize((128, 256), Image.NEAREST),
             (33, 90),
             self.avatar.resize((128, 256), Image.NEAREST),
         )
-
-        bg.save("./test/bg.png")
+        return bg
 
     def render(self):
         self.__crop_farmer()
@@ -484,6 +487,8 @@ class CharacterRenderer:
         self.__draw_accessories()
         self.__draw_hat()
         self.__draw_arms()
-        self.avatar = self.avatar.resize((128, 256), Image.NEAREST)
-        # self.avatar.save("./avatar.png")
-        return self.avatar
+        if self.player["background"]:
+            return self.__render_background()
+        else:
+            self.avatar = self.avatar.resize((128, 256), Image.NEAREST)
+            return self.avatar

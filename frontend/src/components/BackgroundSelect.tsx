@@ -1,41 +1,40 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Check, ChevronDown } from "lucide-react"
+import * as React from "react";
+import { Check, ChevronDown } from "lucide-react";
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
-} from "@/components/ui/command"
+} from "@/components/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
+} from "@/components/ui/popover";
 
 const backgrounds = [
   {
-    value: "no background",
-    label: "No Background",
+    label: "No background",
+    value: null,
   },
   {
-    value: "day background",
-    label: "Day Background",
+    label: "Day background",
+    value: "day",
   },
   {
-    value: "night background",
-    label: "Night Background",
-  }
-]
+    label: "Night background",
+    value: "night",
+  },
+];
 
-export default function ComboboxDemo() {
-  const [open, setOpen] = React.useState(false)
-  const [value, setValue] = React.useState("")
+export default function ComboboxDemo({ value, setValue }) {
+  const [open, setOpen] = React.useState(false);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -47,8 +46,10 @@ export default function ComboboxDemo() {
           className="w-[200px] justify-between"
         >
           {value
-            ? backgrounds.find((background) => background.value === value)?.label
-            : "Select a Background"}
+            ? backgrounds.find((background) => background.value === value)
+                ?.label || "No background"
+            : "No background"}
+
           <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -58,9 +59,9 @@ export default function ComboboxDemo() {
             {backgrounds.map((background) => (
               <CommandItem
                 key={background.value}
-                onSelect={(currentValue) => {
-                  setValue(currentValue === value ? "" : currentValue)
-                  setOpen(false)
+                onSelect={() => {
+                  setValue(background.value); // Set the value to the background value
+                  setOpen(false);
                 }}
               >
                 <Check
@@ -76,5 +77,5 @@ export default function ComboboxDemo() {
         </Command>
       </PopoverContent>
     </Popover>
-  )
+  );
 }
