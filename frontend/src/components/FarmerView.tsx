@@ -1,14 +1,14 @@
-import React from 'react';
+import React from "react";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion"
+} from "@/components/ui/accordion";
 
 export default function FarmerView() {
-  const avatarUrl = localStorage.getItem('avatarUrl');
-  const playerInfo = localStorage.getItem('playerInfo');
+  const avatarUrl = localStorage.getItem("avatarUrl");
+  const playerInfo = localStorage.getItem("playerInfo");
 
   return (
     <div>
@@ -18,14 +18,19 @@ export default function FarmerView() {
             <label className="flex flex-col items-center justify-center w-48 h-80 border-2 border-gray-400 border-dashed rounded-lg cursor-pointer bg-white dark:bg-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 transition ease-in-out duration-150">
               <div className="flex flex-col items-center justify-center pt-6 pb-6">
                 <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                  <img src={avatarUrl ? avatarUrl : 'default-placeholder.jpg'} alt="Avatar" />
+                  <img
+                    src={avatarUrl ? avatarUrl : "default-placeholder.jpg"}
+                    alt="Avatar"
+                  />
                 </p>
               </div>
             </label>
           </div>
         </div>
         <div className="mt-48">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Here's your farmer!</h1>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+            Here&apos;s your farmer!
+          </h1>
         </div>
       </div>
       <div className="mt-4 mx-auto max-w-2xl sm:px-6 lg:px-8">
