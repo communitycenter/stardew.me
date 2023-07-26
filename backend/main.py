@@ -49,7 +49,7 @@ assets = loadAvatarAssets()
 sleeveless_shirts = get_sleeveless_shirts()
 
 
-@app.post("/generate_image")
+@app.post("/avatar")
 async def generate_image(player: Player):
     # BaseModels are not subscriptable so we need to convert to a dict
     player_dict = player.model_dump()
@@ -60,7 +60,7 @@ async def generate_image(player: Player):
 
     # check if image exists in r2
     try:
-        results = s3.head_object(Bucket="players", Key=player_hash)
+        results = s3.head_object(Bucket="stardewclothing", Key=player_hash)
     except botocore.exceptions.ClientError as e:
         Avatar = CharacterRenderer(player_dict, assets, sleeveless_shirts)
         avatar = Avatar.render()
@@ -73,7 +73,7 @@ async def generate_image(player: Player):
         # Upload to cloudflare
         upload = s3.put_object(
             Body=bytesToUpload.read(),
-            Bucket="players",
+            Bucket="stardewclothing",
             Key=player_hash,
             ContentType="image/png",
         )
