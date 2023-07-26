@@ -74,13 +74,13 @@ function getPlayerData(doc: any): Player {
     ];
     shirt = {
       type: parseInt(doc["shirtItem"]["indexInTileSheet"]),
-      dyeable: doc["shirtItem"]["dyeable"] === "true",
+      dyeable: doc["shirtItem"]["dyeable"] === true,
       color: shirtColor,
     };
   } else {
     // default shirt
     shirt =
-      doc["isMale"] === "true"
+      doc["isMale"] === true
         ? { type: 209, dyeable: false, color: [0, 0, 0, 0] }
         : { type: 41, dyeable: false, color: [0, 0, 0, 0] };
   }
@@ -95,7 +95,7 @@ function getPlayerData(doc: any): Player {
     ];
     pants = {
       type: parseInt(doc["pantsItem"]["indexInTileSheet"]),
-      dyeable: doc["pantsItem"]["dyeable"] === "true",
+      dyeable: doc["pantsItem"]["dyeable"] === true,
       color: pantsColor,
     };
   } else {
@@ -105,7 +105,7 @@ function getPlayerData(doc: any): Player {
 
   const player: Player = {
     name,
-    isMale: doc["isMale"] === "true",
+    isMale: doc["isMale"] === true,
     hair: {
       type: parseInt(doc["hair"]),
       color: hairColor,
