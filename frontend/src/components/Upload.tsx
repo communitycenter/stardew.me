@@ -22,6 +22,7 @@ import {
 import { Player } from "../../utils/types/player.types";
 import { Skeleton } from "./ui/skeleton";
 import FarmerView from "./FarmerView";
+import { useAvatarContext } from "@/lib/AvatarContext";
 
 export default function Upload() {
   const { toast } = useToast();
@@ -31,7 +32,7 @@ export default function Upload() {
   const [players, setPlayers] = useState<Player[]>([]);
   const [selectedPlayer, setSelectedPlayer] = useState<Player>();
   const [background, setBackground] = useState<string | null>(null);
-  const [isAvatar, setIsAvatar] = useState<boolean>(false);
+  const { isAvatar, setIsAvatar } = useAvatarContext();
 
   useEffect(() => {
     console.log(selectedPlayer);
