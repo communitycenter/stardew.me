@@ -20,7 +20,7 @@ function classNames(...classes: string[]) {
 
 export default function Header() {
   return (
-    <Disclosure as="nav" className="bg-white">
+    <Disclosure as="nav" className="bg-white dark:bg-neutral-950">
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -53,7 +53,7 @@ export default function Header() {
                         className={classNames(
                           item.current
                             ? "bg-[#f1f5f9] text-gray-900"
-                            : "text-gray-900 hover:bg-[#f7f9fa] transition ease-in-out duration-150",
+                            : "text-gray-900 dark:text-neutral-50 hover:bg-[#f7f9fa] dark:hover:bg-neutral-800/80 transition ease-in-out duration-150",
                           "rounded-md px-3 py-2 text-sm font-medium"
                         )}
                         aria-current={item.current ? "page" : undefined}

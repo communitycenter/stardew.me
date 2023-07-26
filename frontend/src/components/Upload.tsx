@@ -113,16 +113,12 @@ export default function Upload() {
             <DialogHeader>
               <DialogTitle>Select a Farmhand</DialogTitle>
               <div className="gap-1">
-                <div className="dark:hover:bg-neutral-800 transition-colors rounded-md">
                   {players.map((player) => {
                     return (
+                    <div onClick={() => {setSelectedPlayer(player); inputRef?.current?.click();}} className="hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors rounded-md cursor-pointer">
                       <button
                         key={player.name}
                         className="p-3 flex"
-                        onClick={() => {
-                          setSelectedPlayer(player);
-                          inputRef?.current?.click();
-                        }}
                       >
                         <Skeleton>
                           <img
@@ -138,18 +134,18 @@ export default function Upload() {
                           </p>
                         </div>
                       </button>
+                    </div>
                     );
                   })}
-                </div>
               </div>
             </DialogHeader>
           </DialogContent>
         </Dialog>
         <div className="mt-48 mx-auto max-w-2xl sm:px-6 lg:px-8">
           <div className="flex items-center justify-center w-full">
-            <label className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-400 border-dashed rounded-lg cursor-pointer bg-white dark:bg-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 transition ease-in-out duration-150">
+            <label className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-400 border-dashed rounded-lg cursor-pointer bg-white dark:bg-neutral-950 hover:bg-gray-50 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-neutral-800 transition ease-in-out duration-150">
               <div className="flex flex-col items-center justify-center pt-6 pb-6">
-                <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                <p className="mb-2 text-sm text-gray-500 dark:text-white">
                   Drag a Stardew Valley save file here, or click to upload
                 </p>
               </div>
