@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/dialog";
 import { Player } from "../../utils/types/player.types";
 import { Skeleton } from "./ui/skeleton";
+import FarmerView from "./FarmerView";
 
 export default function Upload() {
   const { toast } = useToast();
@@ -29,6 +30,7 @@ export default function Upload() {
   ) as MutableRefObject<HTMLButtonElement>;
   const [players, setPlayers] = useState<Player[]>([]);
   const [selectedPlayer, setSelectedPlayer] = useState<Player>();
+  const [isAvatar, setIsAvatar] = useState<boolean>(false);
 
   useEffect(() => {
     console.log(selectedPlayer);
@@ -46,6 +48,9 @@ export default function Upload() {
 
       const res = await req.json();
       console.log(res);
+      localStorage.setItem("avatarUrl", res.url); {/* localstorage for now */}
+      localStorage.setItem("playerInfo", JSON.stringify(selectedPlayer))
+      setIsAvatar(true);
     }
 
     getAvatar();
@@ -89,65 +94,73 @@ export default function Upload() {
     reader.readAsText(file);
   };
 
-  return (
-    <>
-      <Dialog>
-        <DialogTrigger ref={inputRef} />
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Are you sure absolutely sure?</DialogTitle>
-            <div className="gap-1">
-              <div className="dark:hover:bg-neutral-800 transition-colors rounded-md">
-                {players.map((player) => {
-                  return (
-                    <button
-                      key={player.name}
-                      className="p-3 flex"
-                      onClick={() => {
-                        setSelectedPlayer(player);
-                        inputRef?.current?.click();
-                      }}
-                    >
-                      <Skeleton>
-                        <img
-                          src="../assets/sprite.png"
-                          alt=""
-                          className="w-16 h-16 rounded-md"
-                        />
-                      </Skeleton>
-
-                      <p className="text-sm font-medium text-neutral-900 dark:text-neutral-50 ml-4 mt-3">
-                        {player.name}
+  if (isAvatar) {
+    return (
+        <FarmerView />
+    )
+    } else {
+        return (
+            <>
+              <Dialog>
+                <DialogTrigger ref={inputRef} />
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Select a Farmhand</DialogTitle>
+                    <div className="gap-1">
+                      <div className="dark:hover:bg-neutral-800 transition-colors rounded-md">
+                        {players.map((player) => {
+                          return (
+                            <button
+                              key={player.name}
+                              className="p-3 flex"
+                              onClick={() => {
+                                setSelectedPlayer(player);
+                                inputRef?.current?.click();
+                              }}
+                            >
+                              <Skeleton>
+                                <img
+                                  src="../assets/sprite.png"
+                                  alt=""
+                                  className="w-16 h-16 rounded-md"
+                                />
+                              </Skeleton>
+        
+                              <div className="py-5">
+                                <p className="text-sm font-medium text-neutral-900 dark:text-neutral-50 ml-4">
+                                    {player.name}
+                                </p>
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </DialogHeader>
+                </DialogContent>
+              </Dialog>
+              <div className="mt-48 mx-auto max-w-2xl sm:px-6 lg:px-8">
+                <div className="flex items-center justify-center w-full">
+                  <label className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-400 border-dashed rounded-lg cursor-pointer bg-white dark:bg-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 transition ease-in-out duration-150">
+                    <div className="flex flex-col items-center justify-center pt-6 pb-6">
+                      <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                        Drag a Stardew Valley save file here, or click to upload
                       </p>
-                    </button>
-                  );
-                })}
+                    </div>
+                    <input
+                      id="dropzone-file"
+                      type="file"
+                      className="hidden"
+                      onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e)}
+                    />
+                  </label>
+                </div>
+                <div className="flex gap-4 justify-center mt-4 h-9">
+                  <BackgroundSelect />
+                  <GenerateButton />
+                </div>
               </div>
-            </div>
-          </DialogHeader>
-        </DialogContent>
-      </Dialog>
-      <div className="mt-48 mx-auto max-w-2xl sm:px-6 lg:px-8">
-        <div className="flex items-center justify-center w-full">
-          <label className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-400 border-dashed rounded-lg cursor-pointer bg-white dark:bg-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 transition ease-in-out duration-150">
-            <div className="flex flex-col items-center justify-center pt-6 pb-6">
-              <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                Drag a Stardew Valley save file here, or click to upload
-              </p>
-            </div>
-            <input
-              id="dropzone-file"
-              type="file"
-              className="hidden"
-              onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e)}
-            />
-          </label>
-        </div>
-        <div className="flex gap-4 justify-center mt-4 h-9">
-          <BackgroundSelect />
-          <GenerateButton />
-        </div>
-      </div>
-    </>
-  );
+            </>
+          );
+    }
 }
