@@ -1,8 +1,8 @@
-import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import GitHubButton from "./GitHubButton";
 import DiscordButton from "./DiscordButton";
+import Image from "next/image";
 
 const navigation = [
   { name: "Home", href: "#", current: true },
@@ -36,13 +36,16 @@ export default function Header() {
                   )}
                 </Disclosure.Button>
               </div>
-              <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+              <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start pt-1">
                 <div className="flex flex-shrink-0 items-center">
-                  <img
-                    className="h-8 w-auto"
-                    src="../assets/logo.png"
-                    alt="Your Company"
+                  <Image
+                    width={"36"}
+                    height={"36"}
+                    className="h-9 w-auto"
+                    src="/../public/assets/logo.png"
+                    alt="stardew.me logo"
                   />
+                  <h1 className="pl-4 font-medium">stardew.me</h1>
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-2">
