@@ -1,7 +1,9 @@
 import os
 import uuid
-import boto3
+import boto3, botocore
 import uvicorn
+import hashlib
+import json
 
 from io import BytesIO
 from fastapi import FastAPI
@@ -14,6 +16,17 @@ from lib.renderer import CharacterRenderer
 from lib.tools import get_sleeveless_shirts
 
 load_dotenv()
+
+
+def dict_hash(dictionary):
+    """MD5 hash of a dictionary."""
+    dhash = hashlib.md5()
+    # We need to sort arguments so {'a': 1, 'b': 2} is
+    # the same as {'b': 2, 'a': 1}
+    encoded = json.dumps(dictionary, sort_keys=True).encode()
+    dhash.update(encoded)
+    return dhash.hexdigest()
+
 
 s3 = boto3.client(
     "s3",
@@ -41,32 +54,43 @@ async def generate_image(player: Player):
     # BaseModels are not subscriptable so we need to convert to a dict
     player_dict = player.model_dump()
 
-    Avatar = CharacterRenderer(player_dict, assets, sleeveless_shirts)
-    avatar = Avatar.render()
+    # hash dict
+    player_hash = dict_hash(player_dict)
+    print(player_hash)
 
-    bytesToUpload = BytesIO()
+    # check if image exists in r2
+    try:
+        results = s3.head_object(Bucket="players", Key=player_hash)
+    except botocore.exceptions.ClientError as e:
+        Avatar = CharacterRenderer(player_dict, assets, sleeveless_shirts)
+        avatar = Avatar.render()
 
-    avatar.save(bytesToUpload, "png")
-    bytesToUpload.seek(0)
+        bytesToUpload = BytesIO()
 
-    uuidKey = str(uuid.uuid4())
+        avatar.save(bytesToUpload, "png")
+        bytesToUpload.seek(0)
 
-    # Upload to cloudflare
-    upload = s3.put_object(
-        Body=bytesToUpload.read(),
-        Bucket="players",
-        Key=uuidKey,
-        ContentType="image/png",
-    )
+        # Upload to cloudflare
+        upload = s3.put_object(
+            Body=bytesToUpload.read(),
+            Bucket="players",
+            Key=player_hash,
+            ContentType="image/png",
+        )
 
-    if upload["ResponseMetadata"]["HTTPStatusCode"] == 200:
+        if upload["ResponseMetadata"]["HTTPStatusCode"] == 200:
+            return {
+                "success": True,
+                "url": f"{os.environ.get('r2_pub')}{player_hash}",
+            }
+
+        # avatar.save("test.png")
+        return {"success": True}
+    else:
         return {
             "success": True,
-            "url": f"{os.environ.get('r2_pub')}{uuidKey}",
+            "url": f"{os.environ.get('r2_pub')}{player_hash}",
         }
-
-    # avatar.save("test.png")
-    return {"success": True}
 
 
 if __name__ == "__main__":
