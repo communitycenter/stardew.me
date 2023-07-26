@@ -162,7 +162,7 @@ export default function Upload() {
             </label>
           </div>
           <div className="flex gap-4 justify-center mt-4 h-9">
-            <BackgroundSelect value={background} setValue={background} />
+            <BackgroundSelect value={background} setValue={setBackground} />
             <GenerateButton />
           </div>
         </div>
