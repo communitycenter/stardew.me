@@ -113,13 +113,17 @@ export default function Upload() {
             <DialogHeader>
               <DialogTitle>Select a Farmhand</DialogTitle>
               <div className="gap-1">
-                  {players.map((player) => {
-                    return (
-                    <div onClick={() => {setSelectedPlayer(player); inputRef?.current?.click();}} className="hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors rounded-md cursor-pointer">
-                      <button
-                        key={player.name}
-                        className="p-3 flex"
-                      >
+                {players.map((player) => {
+                  return (
+                    <div
+                      key={player.name}
+                      onClick={() => {
+                        setSelectedPlayer(player);
+                        inputRef?.current?.click();
+                      }}
+                      className="hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors rounded-md cursor-pointer"
+                    >
+                      <button key={player.name} className="p-3 flex">
                         <Skeleton>
                           <img
                             src="../assets/sprite.png"
@@ -135,8 +139,8 @@ export default function Upload() {
                         </div>
                       </button>
                     </div>
-                    );
-                  })}
+                  );
+                })}
               </div>
             </DialogHeader>
           </DialogContent>
