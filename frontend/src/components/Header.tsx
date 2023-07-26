@@ -1,21 +1,21 @@
-import { Fragment } from 'react'
-import { Disclosure, Menu, Transition } from '@headlessui/react'
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import GitHubButton from './GitHubButton'
-import DiscordButton from './DiscordButton'
+import { Fragment } from "react";
+import { Disclosure, Menu, Transition } from "@headlessui/react";
+import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import GitHubButton from "./GitHubButton";
+import DiscordButton from "./DiscordButton";
 
 const navigation = [
-  { name: 'Home', href: '#', current: true },
-  { name: 'Documentation', href: '#', current: false },
-]
+  { name: "Home", href: "#", current: true },
+  { name: "Documentation", href: "#", current: false },
+];
 
 const extLinks = [
-  { name: 'GitHub', href: '#', variant: 'secondary' },
-  { name: 'Discord', href: '#', variant: '' },
-]
+  { name: "GitHub", href: "#", variant: "secondary" },
+  { name: "Discord", href: "#", variant: "" },
+];
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+function classNames(...classes: string[]) {
+  return classes.filter(Boolean).join(" ");
 }
 
 export default function Header() {
@@ -51,10 +51,12 @@ export default function Header() {
                         key={item.name}
                         href={item.href}
                         className={classNames(
-                          item.current ? 'bg-[#f1f5f9] text-gray-900' : 'text-gray-900 hover:bg-[#f7f9fa] transition ease-in-out duration-150',
-                          'rounded-md px-3 py-2 text-sm font-medium'
+                          item.current
+                            ? "bg-[#f1f5f9] text-gray-900"
+                            : "text-gray-900 hover:bg-[#f7f9fa] transition ease-in-out duration-150",
+                          "rounded-md px-3 py-2 text-sm font-medium"
                         )}
-                        aria-current={item.current ? 'page' : undefined}
+                        aria-current={item.current ? "page" : undefined}
                       >
                         {item.name}
                       </a>
@@ -79,10 +81,12 @@ export default function Header() {
                   as="a"
                   href={item.href}
                   className={classNames(
-                    item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                    'block rounded-md px-3 py-2 text-base font-medium'
+                    item.current
+                      ? "bg-gray-900 text-white"
+                      : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                    "block rounded-md px-3 py-2 text-base font-medium"
                   )}
-                  aria-current={item.current ? 'page' : undefined}
+                  aria-current={item.current ? "page" : undefined}
                 >
                   {item.name}
                 </Disclosure.Button>
@@ -92,5 +96,5 @@ export default function Header() {
         </>
       )}
     </Disclosure>
-  )
+  );
 }

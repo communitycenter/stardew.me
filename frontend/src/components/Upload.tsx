@@ -30,7 +30,7 @@ export default function Upload() {
   ) as MutableRefObject<HTMLButtonElement>;
   const [players, setPlayers] = useState<Player[]>([]);
   const [selectedPlayer, setSelectedPlayer] = useState<Player>();
-  const [background, setBackground] = useState<"day" | "night" | null>(null);
+  const [background, setBackground] = useState<string | null>(null);
   const [isAvatar, setIsAvatar] = useState<boolean>(false);
 
   useEffect(() => {
@@ -38,7 +38,7 @@ export default function Upload() {
 
     if (!selectedPlayer) return;
 
-    selectedPlayer["background"] = background;
+    selectedPlayer["background"] = background as "day" | "night" | null;
 
     async function getAvatar() {
       const req = await fetch("http://localhost:8000/generate_image", {

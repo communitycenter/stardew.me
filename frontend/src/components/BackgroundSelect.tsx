@@ -33,7 +33,12 @@ const backgrounds = [
   },
 ];
 
-export default function ComboboxDemo({ value, setValue }) {
+interface ComboboxDemoProps {
+  value: React.SetStateAction<string | null>;
+  setValue: React.Dispatch<React.SetStateAction<string | null>>;
+}
+
+const ComboboxDemo: React.FC<ComboboxDemoProps> = ({ value, setValue }) => {
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -78,4 +83,6 @@ export default function ComboboxDemo({ value, setValue }) {
       </PopoverContent>
     </Popover>
   );
-}
+};
+
+export default ComboboxDemo;
