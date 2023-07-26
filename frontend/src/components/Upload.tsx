@@ -23,6 +23,7 @@ import { Player } from "../../utils/types/player.types";
 import { Skeleton } from "./ui/skeleton";
 import FarmerView from "./FarmerView";
 import { useAvatarContext } from "@/lib/AvatarContext";
+import { useUploadContext } from '@/lib/UploadContext';
 
 export default function Upload() {
   const { toast } = useToast();
@@ -33,6 +34,8 @@ export default function Upload() {
   const [selectedPlayer, setSelectedPlayer] = useState<Player>();
   const [background, setBackground] = useState<string | null>(null);
   const { isAvatar, setIsAvatar } = useAvatarContext();
+  const { selectedFile, setSelectedFile } = useUploadContext();
+  
 
   useEffect(() => {
     console.log(selectedPlayer);
@@ -66,41 +69,40 @@ export default function Upload() {
     // make a post request to localhost:8000 with the body and console log the response
   }, [selectedPlayer, background]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
+  const handleChange = async () => {
+    if (selectedFile) {
+      const reader = new FileReader();
 
-    const file = e.target!.files![0];
+      reader.onload = async (event) => {
+        try {
+          // Now we can begin parsing the save file
+          let players: Player[] = [];
+          // searches for all players in the save file and returns an array
+          // objects are unprocessed and will be used to parse each player's data
+          const data = await parseSaveFile(event.target?.result as string);
 
-    const reader = new FileReader();
+          data.forEach((player) => {
+            players.push(player);
+          });
 
-    reader.onload = async function (event) {
-      try {
-        // Now we can begin parsing the save file
-        let players: Player[] = [];
-        // searches for all players in the save file and returns an array
-        // objects are unprocessed and will be used to parse each player's data
-        const data = await parseSaveFile(event.target?.result as string);
+          setPlayers(players);
 
-        data.forEach((player) => {
-          players.push(player);
-        });
-
-        setPlayers(players);
-
-        if (players.length > 1) {
-          inputRef?.current?.click();
-        } else {
-          setSelectedPlayer(players[0]);
+          if (players.length > 1) {
+            inputRef?.current?.click();
+          } else {
+            setSelectedPlayer(players[0]);
+          }
+        } catch (err) {
+          toast({
+            variant: "destructive",
+            title: "Error Parsing File",
+            description: err instanceof Error ? err.message : "Unknown error.",
+          });
         }
-      } catch (err) {
-        toast({
-          variant: "destructive",
-          title: "Error Parsing File",
-          description: err instanceof Error ? err.message : "Unknown error.",
-        });
-      }
-    };
-    reader.readAsText(file);
+      };
+
+      reader.readAsText(selectedFile);
+    }
   };
 
   if (isAvatar) {
@@ -151,20 +153,24 @@ export default function Upload() {
             <label className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-400 border-dashed rounded-lg cursor-pointer bg-white dark:bg-neutral-950 hover:bg-gray-50 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-neutral-800 transition ease-in-out duration-150">
               <div className="flex flex-col items-center justify-center pt-6 pb-6">
                 <p className="mb-2 text-sm text-gray-500 dark:text-white">
-                  Drag a Stardew Valley save file here, or click to upload
+                  {selectedFile ? "Uploaded file: " + selectedFile.name : "Drag a Stardew Valley save file here, or click to upload"}
                 </p>
               </div>
               <input
                 id="dropzone-file"
                 type="file"
                 className="hidden"
-                onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e)}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    setSelectedFile(e.target.files ? e.target.files[0] : null)
+                  }
               />
             </label>
           </div>
           <div className="flex gap-4 justify-center mt-4 h-9">
             <BackgroundSelect value={background} setValue={setBackground} />
-            <GenerateButton />
+            <div onClick={handleChange}>
+              <GenerateButton />
+            </div>
           </div>
         </div>
       </>
