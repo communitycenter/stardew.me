@@ -54,7 +54,7 @@ async def generate_image(player: Player):
     # Upload to cloudflare
     upload = s3.put_object(
         Body=bytesToUpload.read(),
-        Bucket="stardewclothing",
+        Bucket="players",
         Key=uuidKey,
         ContentType="image/png",
     )
