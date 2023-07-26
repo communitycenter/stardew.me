@@ -7,10 +7,12 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button"
+import { useAvatarContext } from "../lib/AvatarContext"
 
 export default function FarmerView() {
   const avatarUrl = localStorage.getItem("avatarUrl");
   const playerInfo = localStorage.getItem("playerInfo");
+  const { isAvatar, setIsAvatar } = useAvatarContext();
 
   const downloadImage = () => {
     if (avatarUrl) {
@@ -26,6 +28,12 @@ export default function FarmerView() {
       // Clean up and remove the link from the DOM
       document.body.removeChild(link);
     }
+  };
+
+  const resetAvatar = () => {
+    setIsAvatar(false);
+    localStorage.removeItem("avatarUrl");
+    localStorage.removeItem("playerInfo");
   };
 
   return (
@@ -54,10 +62,8 @@ export default function FarmerView() {
             <Button onClick={downloadImage}>
               Download
             </Button>
-            <Button>
-              <Link href="/">
-                New Farmer
-              </Link>
+            <Button onClick={resetAvatar}>
+              New Farmer
             </Button>
           </div>
         </div>
