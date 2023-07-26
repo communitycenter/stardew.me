@@ -7,7 +7,7 @@ export default function Index() {
   return (
     <>
       <Head>
-        <title>stardew.me</title>
+        <title>stardew.me | Stardew Valley Avatar Generator</title>
         <meta
           name="description"
           content="Generate a Stardew Valley avatar for your player."
