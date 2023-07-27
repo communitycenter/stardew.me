@@ -17,13 +17,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useUploadContext } from "../lib/UploadContext";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
 
 const backgrounds = [
   {
@@ -47,80 +40,49 @@ interface ComboboxDemoProps {
 
 const ComboboxDemo: React.FC<ComboboxDemoProps> = ({ value, setValue }) => {
   const [open, setOpen] = React.useState(false);
-  const { selectedFile } = useUploadContext();
 
-  const DisabledBackgroundSelect = () => {
-    return (
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger>
-            <Popover open={open} onOpenChange={setOpen}>
-              <PopoverTrigger asChild>
-              <Button
-                  variant="outline"
-                  role="combobox"
-                  aria-expanded={open}
-                  className="w-[200px] justify-between disabled cursor-default hover:bg-white dark:hover:bg-neutral-950"
-              >
-                  {value
-                  ? backgrounds.find((background) => background.value === value)
-                      ?.label || "No background"
-                  : "No background"}
-      
-                  <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-              </Button>
-              </PopoverTrigger>
-            </Popover>
-          </TooltipTrigger>
-          <TooltipContent>
-          <p>Upload a file first!</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-    )
-  };
-
-  return selectedFile ? <Popover open={open} onOpenChange={setOpen}>
-    <PopoverTrigger asChild>
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
         <Button
-        variant="outline"
-        role="combobox"
-        aria-expanded={open}
-        className="w-[200px] justify-between"
+          variant="outline"
+          role="combobox"
+          aria-expanded={open}
+          className="w-[200px] justify-between"
         >
-        {value
+          {value
             ? backgrounds.find((background) => background.value === value)
                 ?.label || "No background"
             : "No background"}
 
-        <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
-    </PopoverTrigger>
-    <PopoverContent className="w-[200px] p-0">
+      </PopoverTrigger>
+      <PopoverContent className="w-[200px] p-0">
         <Command>
-        <CommandGroup>
+          <CommandGroup>
             {backgrounds.map((background) => (
-            <CommandItem
+              <CommandItem
                 key={background.value}
                 onSelect={() => {
-                setValue(background.value); // Set the value to the background value
-                setOpen(false);
+                  setValue(background.value); // Set the value to the background value
+                  setOpen(false);
                 }}
-            >
+              >
                 <Check
-                className={cn(
+                  className={cn(
                     "mr-2 h-4 w-4",
                     value === background.value ? "opacity-100" : "opacity-0"
-                )}
+                  )}
                 />
                 {background.label}
-            </CommandItem>
+              </CommandItem>
             ))}
-        </CommandGroup>
+          </CommandGroup>
         </Command>
-    </PopoverContent>
+      </PopoverContent>
     </Popover>
-    : <DisabledBackgroundSelect />;
+  );
 };
 
 export default ComboboxDemo;
