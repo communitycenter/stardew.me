@@ -41,6 +41,10 @@ export default function Index() {
         <meta property="og:url" content="https://stardew.me" />
         <meta property="og:site_name" content="stardew.me" />
         <meta property="og:type" content="website" />
+        <meta
+          http-equiv="Content-Security-Policy"
+          content="upgrade-insecure-requests"
+        />
         <link rel="icon" href="/assets/logo.png" />
       </Head>
       <div className="flex flex-col min-h-screen">
