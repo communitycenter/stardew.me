@@ -24,6 +24,7 @@ import { Skeleton } from "./ui/skeleton";
 import FarmerView from "./FarmerView";
 import { useAvatarContext } from "@/lib/AvatarContext";
 import { useUploadContext } from "@/lib/UploadContext";
+import { useMediaQuery } from 'react-responsive';
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import { GetStaticProps } from "next";
@@ -39,6 +40,7 @@ export default function Upload() {
   const { isAvatar, setIsAvatar } = useAvatarContext();
   const { selectedFile, setSelectedFile } = useUploadContext();
   const [recent, setRecent] = useState<string[]>([]);
+  const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
 
   useEffect(() => {
     console.log(selectedPlayer);
@@ -215,8 +217,8 @@ export default function Upload() {
             </div>
           </div>
         </div>
-        <div>
-          <h2 className="text-xl font-semibold text-center mt-16 mb-4">
+        <div className="sm:mb-8 mb-4">
+          <h2 className="text-xl font-semibold text-center mt-8 mb-4">
             Recently Generated
           </h2>
           <div className="flex flex-wrap justify-center gap-3">
@@ -224,8 +226,8 @@ export default function Upload() {
               // Skeleton loading effect when recent.length is 0
               <div className="mb-4 animate-spin rounded-full h-8 w-8 border-t-2 border-primary border-solid"></div>
             ) : (
-              // Render the images when recent.length is greater than 0
-              recent.map((url, index) => (
+              // Render the images when recent.length is greater than 0, and only render the first 5 images on mobile
+              recent.slice(0, isMobile ? 5 : recent.length).map((url, index) => (
                 <div key={url}>
                   <img src={url} className={`h-24 rounded-md`} alt="Recent" />
                 </div>
