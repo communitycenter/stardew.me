@@ -184,7 +184,7 @@ export default function Upload() {
             </DialogHeader>
           </DialogContent>
         </Dialog>
-        <div className="mt-24 mx-auto max-w-2xl sm:px-6 lg:px-8">
+        <div className="mt-24 mx-auto max-w-2xl px-4 sm:px-6 lg:px-8">
           <div className="my-16">
             <div className="text-center">
               <h2 className="text-2xl font-semibold">stardew.me</h2>
@@ -215,7 +215,7 @@ export default function Upload() {
           <div className="flex gap-4 justify-center mt-4 h-9 disabled">
             <BackgroundSelect value={background} setValue={setBackground} />
             <div onClick={handleChange}>
-              <Button className="disabled:opacity-0">Generate Farmer</Button>
+              <GenerateButton />
             </div>
           </div>
         </div>
@@ -226,7 +226,7 @@ export default function Upload() {
           <div className="flex flex-wrap justify-center gap-3">
             {recent.length === 0 ? (
               // Skeleton loading effect when recent.length is 0
-              <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-primary border-solid"></div>
+              <div className="mb-4 animate-spin rounded-full h-8 w-8 border-t-2 border-primary border-solid"></div>
             ) : (
               // Render the images when recent.length is greater than 0
               recent.map((url, index) => (
