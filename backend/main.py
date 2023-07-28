@@ -41,6 +41,9 @@ middleware = [
     Middleware(
         CORSMiddleware,
         allow_origins=["*"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
     )
 ]
 
@@ -48,6 +51,11 @@ app = FastAPI(middleware=middleware)
 
 assets = loadAvatarAssets()
 sleeveless_shirts = get_sleeveless_shirts()
+
+
+@app.options("/{path:path}", include_in_schema=False)
+async def options_route(path: str):
+    return {"message": "OK"}
 
 
 @app.post("/avatar")
