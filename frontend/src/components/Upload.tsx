@@ -23,7 +23,10 @@ import { Player } from "../../utils/types/player.types";
 import { Skeleton } from "./ui/skeleton";
 import FarmerView from "./FarmerView";
 import { useAvatarContext } from "@/lib/AvatarContext";
-import { useUploadContext } from '@/lib/UploadContext';
+import { useUploadContext } from "@/lib/UploadContext";
+import { cn } from "@/lib/utils";
+import { Button } from "./ui/button";
+import { GetStaticProps } from "next";
 
 export default function Upload() {
   const { toast } = useToast();
@@ -35,7 +38,7 @@ export default function Upload() {
   const [background, setBackground] = useState<string | null>(null);
   const { isAvatar, setIsAvatar } = useAvatarContext();
   const { selectedFile, setSelectedFile } = useUploadContext();
-  
+  const [recent, setRecent] = useState<string[]>([]);
 
   useEffect(() => {
     console.log(selectedPlayer);
@@ -45,7 +48,7 @@ export default function Upload() {
     selectedPlayer["background"] = background as "day" | "night" | null;
 
     async function getAvatar() {
-      const req = await fetch("http://localhost:8000/generate_image", {
+      const req = await fetch("http://localhost:8000/avatar", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -54,6 +57,15 @@ export default function Upload() {
       });
 
       const res = await req.json();
+
+      if (!res.success)
+        return toast({
+          variant: "destructive",
+          title: "Error generating avatar",
+          description:
+            "Something went wrong on our backend! Please join our Discord & let us know <3",
+        });
+
       console.log(res);
       localStorage.setItem("avatarUrl", res.url);
       {
@@ -68,6 +80,23 @@ export default function Upload() {
     setBackground(null);
     // make a post request to localhost:8000 with the body and console log the response
   }, [selectedPlayer, background]);
+
+  useEffect(() => {
+    if (recent.length > 0) return;
+
+    async function getRecent() {
+      try {
+        const res = await fetch("http://localhost:8000/recent");
+        const data = await res.json();
+        console.log(data);
+        setRecent(data.recent);
+      } catch (error) {
+        console.error("Error fetching recent data:", error);
+      }
+    }
+
+    getRecent();
+  }, [recent]); // <-- Empty dependency array to run the effect only once
 
   const handleChange = async () => {
     if (selectedFile) {
@@ -153,7 +182,9 @@ export default function Upload() {
             <label className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-400 border-dashed rounded-lg cursor-pointer bg-white dark:bg-neutral-950 hover:bg-gray-50 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-neutral-800 transition ease-in-out duration-150">
               <div className="flex flex-col items-center justify-center pt-6 pb-6">
                 <p className="mb-2 text-sm text-gray-500 dark:text-white">
-                  {selectedFile ? "Uploaded file: " + selectedFile.name : "Drag a Stardew Valley save file here, or click to upload"}
+                  {selectedFile
+                    ? "Uploaded file: " + selectedFile.name
+                    : "Drag a Stardew Valley save file here, or click to upload"}
                 </p>
               </div>
               <input
@@ -161,16 +192,34 @@ export default function Upload() {
                 type="file"
                 className="hidden"
                 onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                    setSelectedFile(e.target.files ? e.target.files[0] : null)
-                  }
+                  setSelectedFile(e.target.files ? e.target.files[0] : null)
+                }
               />
             </label>
           </div>
-          <div className="flex gap-4 justify-center mt-4 h-9">
+          <div className="flex gap-4 justify-center mt-4 h-9 disabled">
             <BackgroundSelect value={background} setValue={setBackground} />
             <div onClick={handleChange}>
-              <GenerateButton />
+              <Button className="disabled:opacity-0">Generate Farmer</Button>
             </div>
+          </div>
+        </div>
+        <div>
+          <h2 className="text-xl font-semibold text-center mt-16 mb-4">
+            Recently Generated
+          </h2>
+          <div className="flex flex-wrap justify-center gap-3">
+            {recent.length === 0 ? (
+              // Skeleton loading effect when recent.length is 0
+              <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-primary border-solid"></div>
+            ) : (
+              // Render the images when recent.length is greater than 0
+              recent.map((url, index) => (
+                <div key={url}>
+                  <img src={url} className={`h-24 rounded-md`} alt="Recent" />
+                </div>
+              ))
+            )}
           </div>
         </div>
       </>

@@ -93,5 +93,24 @@ async def generate_image(player: Player):
         }
 
 
+@app.get("/recent")
+async def get_recent_generations():
+    try:
+        results = s3.list_objects_v2(Bucket="stardewclothing", MaxKeys=10)
+        print(results)
+    except botocore.exceptions.ClientError as e:
+        return {"success": False, "error": e}
+    else:
+        return {
+            "success": True,
+            "recent": [
+                f"{os.environ.get('r2_pub')}{x['Key']}"
+                for x in sorted(
+                    results["Contents"], key=lambda k: k["LastModified"], reverse=True
+                )
+            ],
+        }
+
+
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
