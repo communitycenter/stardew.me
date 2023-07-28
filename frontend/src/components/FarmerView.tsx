@@ -122,7 +122,7 @@ export default function FarmerView() {
                           title: "Copied!",
                         });
                       }}
-                      className="absolute right-4 bottom-4 py-1.5 px-3 bg-[#0a0a0a] border border-zinc-300 dark:border-zinc-800 rounded-md hover:bg-zinc-900 transition-colors duration-150"
+                      className="absolute right-4 bottom-4 py-1.5 px-3 bg-[#0a0a0a] text-white border border-zinc-300 dark:border-zinc-800 rounded-md hover:bg-zinc-900 transition-colors duration-150"
                     >
                       Copy
                     </button>
