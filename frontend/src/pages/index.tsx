@@ -10,11 +10,11 @@ export default function Index() {
         <title>stardew.me | Stardew Valley Avatar Generator</title>
         <meta
           name="description"
-          content="Generate a Stardew Valley avatar for your player."
+          content="Generate your own Stardew Valley avatar sprites from a save file. Create a unique digital representation of your in-game character."
         />
         <meta
           name="keywords"
-          content="stardew valley, stardew, avatar, generator, stardew avatar, stardew generator, stardew valley avatar, stardew valley generator, stardew valley avatar generator, stardew valley avatar maker, stardew valley maker, stardew valley avatar creator, stardew valley creator, stardew valley avatar generator, stardew"
+          content="stardew valley, stardew, avatar, generator, stardew avatar, stardew generator, stardew valley avatar, stardew valley generator, stardew valley avatar generator, stardew valley avatar maker, stardew valley maker, stardew valley avatar creator, stardew valley creator, stardew valley avatar generator, stardew, stardew pixel art, stardew avatar generator"
         />
         <meta name="author" content="stardew.me" />
         <meta name="theme-color" content="#ffffff" />
@@ -23,21 +23,21 @@ export default function Index() {
         <meta name="twitter:title" content="stardew.me" />
         <meta
           name="twitter:description"
-          content="Generate a picture of your Stardew Valley player."
+          content="Generate your own Stardew Valley avatar sprites from a save file. Create a unique digital representation of your in-game character."
         />
-        {/* <meta
+        <meta
           name="twitter:image"
-          content="https://stardew.me/assets/og-image.png"
-        /> */}
+          content="https://stardew.me/assets/logo.png"
+        />
         <meta property="og:title" content="stardew.me" />
         <meta
           property="og:description"
-          content="Generate a picture of your Stardew Valley player."
+          content="Generate your own Stardew Valley avatar sprites from a save file. Create a unique digital representation of your in-game character."
         />
-        {/* <meta
+        <meta
           property="og:image"
-          content="https://stardew.me/assets/og-image.png"
-        /> */}
+          content="https://stardew.me/assets/logo.png"
+        />
         <meta property="og:url" content="https://stardew.me" />
         <meta property="og:site_name" content="stardew.me" />
         <meta property="og:type" content="website" />
