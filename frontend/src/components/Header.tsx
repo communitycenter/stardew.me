@@ -42,7 +42,7 @@ export default function Header() {
                     width={"36"}
                     height={"36"}
                     className="h-9 w-auto"
-                    src="../assets/logo.png"
+                    src="https://stardew.me/assets/logo.png"
                     alt="stardew.me logo"
                   />
                   <h1 className="pl-4 font-medium">stardew.me</h1>
