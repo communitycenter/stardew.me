@@ -48,7 +48,7 @@ export default function Upload() {
     selectedPlayer["background"] = background as "day" | "night" | null;
 
     async function getAvatar() {
-      const req = await fetch("http://localhost:8000/avatar", {
+      const req = await fetch("https://api.stardew.me/avatar", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -86,7 +86,7 @@ export default function Upload() {
 
     async function getRecent() {
       try {
-        const res = await fetch("http://localhost:8000/recent");
+        const res = await fetch("https://api.stardew.me/recent");
         const data = await res.json();
         console.log(data);
         setRecent(data.recent);
@@ -177,7 +177,15 @@ export default function Upload() {
             </DialogHeader>
           </DialogContent>
         </Dialog>
-        <div className="mt-48 mx-auto max-w-2xl sm:px-6 lg:px-8">
+        <div className="mt-24 mx-auto max-w-2xl sm:px-6 lg:px-8">
+          <div className="my-16">
+            <div className="text-center">
+              <h2 className="text-2xl font-semibold">stardew.me</h2>
+              <p className="mt-2 text-gray-500 dark:text-gray-400">
+                Upload your Stardew Valley save & generate your avatar!
+              </p>
+            </div>
+          </div>
           <div className="flex items-center justify-center w-full">
             <label className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-400 border-dashed rounded-lg cursor-pointer bg-white dark:bg-neutral-950 hover:bg-gray-50 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-neutral-800 transition ease-in-out duration-150">
               <div className="flex flex-col items-center justify-center pt-6 pb-6">
