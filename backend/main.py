@@ -53,9 +53,9 @@ assets = loadAvatarAssets()
 sleeveless_shirts = get_sleeveless_shirts()
 
 
-@app.options("/{path:path}", include_in_schema=False)
-async def options_route(path: str):
-    return {"message": "OK"}
+# @app.options("/{path:path}", include_in_schema=False)
+# async def options_route(path: str):
+#     return {"message": "OK"}
 
 
 @app.post("/avatar")
