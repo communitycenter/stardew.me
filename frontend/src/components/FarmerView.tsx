@@ -6,8 +6,9 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Button } from "@/components/ui/button"
-import { useAvatarContext } from "../lib/AvatarContext"
+import { Button } from "@/components/ui/button";
+import { useAvatarContext } from "../lib/AvatarContext";
+import { useToast } from "./ui/use-toast";
 
 export default function FarmerView() {
   const avatarUrl = localStorage.getItem("avatarUrl");
@@ -17,9 +18,9 @@ export default function FarmerView() {
   const downloadImage = () => {
     if (avatarUrl) {
       // Create a link element
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = avatarUrl;
-      link.download = 'avatar_image.png'; // Specify the filename for the downloaded image
+      link.download = "avatar_image.png"; // Specify the filename for the downloaded image
       document.body.appendChild(link);
 
       // Simulate a click on the link to trigger the download
@@ -35,6 +36,8 @@ export default function FarmerView() {
     localStorage.removeItem("avatarUrl");
     localStorage.removeItem("playerInfo");
   };
+
+  const { toast } = useToast();
 
   return (
     <div>
@@ -59,12 +62,8 @@ export default function FarmerView() {
             Here&apos;s your farmer!
           </h1>
           <div className="mt-4 grid grid-cols-2 gap-2">
-            <Button onClick={downloadImage}>
-              Download
-            </Button>
-            <Button onClick={resetAvatar}>
-              New Farmer
-            </Button>
+            <Button onClick={downloadImage}>Download</Button>
+            <Button onClick={resetAvatar}>New Farmer</Button>
           </div>
         </div>
       </div>
@@ -74,12 +73,8 @@ export default function FarmerView() {
             Here&apos;s your farmer!
           </h1>
           <div className="mt-4 grid grid-cols-2 gap-2">
-            <Button onClick={downloadImage}>
-              Download
-            </Button>
-            <Button onClick={resetAvatar}>
-              New Farmer
-            </Button>
+            <Button onClick={downloadImage}>Download</Button>
+            <Button onClick={resetAvatar}>New Farmer</Button>
           </div>
         </div>
         <div className="mt-12 sm:px-6 lg:px-8">
@@ -100,18 +95,44 @@ export default function FarmerView() {
       </div>
       <div className="mt-8 mx-auto max-w-2xl px-4 sm:px-6 lg:px-8">
         <Accordion type="single" collapsible>
-          <AccordionItem value="item-1">
+          <AccordionItem
+            value="item-1"
+            className="border-gray-300 dark:border-gray-700"
+          >
             <AccordionTrigger>Expert Mode</AccordionTrigger>
             <AccordionContent>
-              <div className="mt-4 bg-[#0F111A] h-48 rounded-lg">
-                <div className="px-2">
-                  <p className="text-gray-100">
-                    <pre>
-                      <code>{playerInfo}</code>
-                    </pre>
-                  </p>
-                </div>
-              </div>
+              <>
+                {playerInfo ? (
+                  <div className="mt-4 relative h-64">
+                    <div className="bg-[#0F111A] h-full rounded-lg p-3 overflow-scroll">
+                      <p className="text-gray-100">
+                        <pre>
+                          <code>
+                            {JSON.stringify(JSON.parse(playerInfo), null, 4)}
+                          </code>
+                        </pre>
+                      </p>
+                    </div>
+
+                    <button
+                      onClick={() => {
+                        window.navigator.clipboard.writeText(playerInfo);
+                        toast({
+                          variant: "default",
+                          title: "Copied!",
+                        });
+                      }}
+                      className="absolute right-4 bottom-4 py-1.5 px-3 bg-[#0a0a0a] border border-zinc-300 dark:border-zinc-800 rounded-md hover:bg-zinc-900 transition-colors duration-150"
+                    >
+                      Copy
+                    </button>
+                  </div>
+                ) : (
+                  <div className="relative mt-4 bg-[#0F111A] h-64 rounded-lg p-2 overflow-scroll flex items-center justify-center text-gray-400">
+                    No player info found.
+                  </div>
+                )}
+              </>
             </AccordionContent>
           </AccordionItem>
         </Accordion>
