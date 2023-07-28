@@ -41,7 +41,7 @@ export default function FarmerView() {
       <div className="flex mx-auto max-w-2xl w-full">
         <div className="mt-48 sm:px-6 lg:px-8">
           <div className="flex items-center justify-center w-full">
-            <div className="flex flex-col items-center justify-center w-48 h-80 border-2 border-gray-400 border-dashed rounded-lg bg-white dark:bg-neutral-950 dark:border-gray-600">
+            <div className="flex flex-col items-center justify-center w-48 h-80 rounded-lg bg-white dark:bg-neutral-950 dark:border-gray-600">
               <div className="flex flex-col items-center justify-center pt-6 pb-6">
                 <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
                   <img
