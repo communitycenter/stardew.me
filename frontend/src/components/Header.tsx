@@ -3,9 +3,10 @@ import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { Button } from "./ui/button";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const navigation = [
-  { name: "Home", href: "#", current: true },
+  { name: "Home", href: "/", current: true },
   { name: "Documentation", href: "/docs", current: false },
 ];
 
@@ -19,6 +20,12 @@ function classNames(...classes: string[]) {
 }
 
 export default function Header() {
+  const router = useRouter();
+
+  navigation.forEach((item) => {
+    item.current = item.href === router.asPath;
+  });
+
   return (
     <Disclosure as="nav" className="bg-white dark:bg-neutral-950">
       {({ open }) => (
@@ -50,19 +57,20 @@ export default function Header() {
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-2">
                     {navigation.map((item) => (
-                      <a
-                        key={item.name}
-                        href={item.href}
-                        className={classNames(
-                          item.current
-                            ? "bg-[#f1f5f9] text-gray-900"
-                            : "text-gray-900 dark:text-neutral-50 hover:bg-[#f7f9fa] dark:hover:bg-neutral-800/80 transition ease-in-out duration-150",
-                          "rounded-md px-3 py-2 text-sm font-medium"
-                        )}
-                        aria-current={item.current ? "page" : undefined}
-                      >
-                        {item.name}
-                      </a>
+                      <Link href={item.href}>
+                        <div
+                          key={item.name}
+                          className={classNames(
+                            item.current
+                              ? "bg-[#f1f5f9] text-gray-900"
+                              : "text-gray-900 dark:text-neutral-50 hover:bg-[#f7f9fa] dark:hover:bg-neutral-800/80 transition ease-in-out duration-150",
+                            "rounded-md px-3 py-2 text-sm font-medium"
+                          )}
+                          aria-current={item.current ? "page" : undefined}
+                        >
+                          {item.name}
+                        </div>
+                      </Link>
                     ))}
                   </div>
                 </div>
