@@ -3,6 +3,8 @@ import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import GitHubButton from "./GitHubButton";
 import DiscordButton from "./DiscordButton";
 import Image from "next/image";
+import { Button } from "./ui/button";
+import Link from "next/link";
 
 const navigation = [
   { name: "Home", href: "#", current: true },
@@ -69,8 +71,14 @@ export default function Header() {
               </div>
               <div className="hidden sm:ml-6 sm:block">
                 <div className="flex space-x-2">
-                  <GitHubButton />
-                  <DiscordButton />
+                  <Button variant="secondary">
+                    <Link href="https://github.com/communitycenter/stardew.me">
+                      GitHub
+                    </Link>
+                  </Button>
+                  <Button>
+                    <Link href="https://discord.gg/NkgNVZwQ2M">Discord</Link>
+                  </Button>
                 </div>
               </div>
             </div>

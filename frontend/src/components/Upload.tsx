@@ -184,7 +184,7 @@ export default function Upload() {
                 <p className="mb-2 text-sm text-gray-500 dark:text-white">
                   {selectedFile
                     ? "Uploaded file: " + selectedFile.name
-                    : "Drag a Stardew Valley save file here, or click to upload"}
+                    : "Click to upload a Stardew Valley save file!"}
                 </p>
               </div>
               <input
