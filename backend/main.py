@@ -47,7 +47,6 @@ app.add_middleware(
     expose_headers=["set-cookie"],  # Expose the "Set-Cookie" header to the browser
     allow_headers=["*"],
     allow_methods=["*"],
-    allow_credentials=True,
 )
 
 assets = loadAvatarAssets()
