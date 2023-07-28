@@ -48,10 +48,11 @@ export default function Upload() {
     selectedPlayer["background"] = background as "day" | "night" | null;
 
     async function getAvatar() {
-      const req = await fetch("https://api.stardew.me/avatar", {
+      const req = await fetch("https://api.stardew.me/avatar/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
         },
         body: JSON.stringify(selectedPlayer),
       });
@@ -86,7 +87,13 @@ export default function Upload() {
 
     async function getRecent() {
       try {
-        const res = await fetch("https://api.stardew.me/recent");
+        const res = await fetch("https://api.stardew.me/recent/", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+        });
         const data = await res.json();
         console.log(data);
         setRecent(data.recent);
