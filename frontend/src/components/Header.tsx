@@ -1,7 +1,5 @@
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import GitHubButton from "./GitHubButton";
-import DiscordButton from "./DiscordButton";
 import Image from "next/image";
 import { Button } from "./ui/button";
 import Link from "next/link";
