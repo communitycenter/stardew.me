@@ -45,7 +45,7 @@ export default function Index() {
           http-equiv="Content-Security-Policy"
           content="upgrade-insecure-requests"
         />
-        <link rel="icon" href="/assets/logo.png" />
+        <link rel="icon" href="https://stardew.me/assets/logo.png" />
       </Head>
       <div className="flex flex-col min-h-screen">
         <Header />
