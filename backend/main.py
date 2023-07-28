@@ -1,12 +1,13 @@
 import os
 import uuid
 import boto3, botocore
+from fastapi.middleware import Middleware
 import uvicorn
 import hashlib
 import json
 
 from io import BytesIO
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 from starlette.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
@@ -35,10 +36,26 @@ s3 = boto3.client(
     aws_secret_access_key=os.environ.get("r2_secret"),
 )
 
-app = FastAPI()
+
+middleware = [
+    Middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+]
+
+app = FastAPI(middleware=middleware)
 
 assets = loadAvatarAssets()
 sleeveless_shirts = get_sleeveless_shirts()
+
+
+@app.options("/{path:path}", include_in_schema=False)
+async def options_route(path: str):
+    return {"message": "OK"}
 
 
 @app.post("/avatar")
@@ -102,16 +119,6 @@ async def get_recent_generations():
                 )
             ],
         }
-
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-    expose_headers=["set-cookie"],  # Expose the "Set-Cookie" header to the browser
-)
 
 
 if __name__ == "__main__":

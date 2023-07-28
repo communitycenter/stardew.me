@@ -89,10 +89,6 @@ export default function Upload() {
       try {
         const res = await fetch("https://api.stardew.me/recent/", {
           method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          },
         });
         const data = await res.json();
         console.log(data);
