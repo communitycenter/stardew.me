@@ -38,7 +38,7 @@ export default function FarmerView() {
 
   return (
     <div>
-      <div className="flex mx-auto max-w-2xl w-full">
+      <div className="hidden sm:flex mx-auto max-w-2xl w-full">
         <div className="mt-48 sm:px-6 lg:px-8">
           <div className="flex items-center justify-center w-full">
             <div className="flex flex-col items-center justify-center w-48 h-80 rounded-lg bg-white dark:bg-neutral-950 dark:border-gray-600">
@@ -68,7 +68,37 @@ export default function FarmerView() {
           </div>
         </div>
       </div>
-      <div className="mt-4 mx-auto max-w-2xl sm:px-6 lg:px-8">
+      <div className="block sm:hidden mx-auto max-w-2xl w-full px-4">
+        <div className="mt-16">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+            Here&apos;s your farmer!
+          </h1>
+          <div className="mt-4 grid grid-cols-2 gap-2">
+            <Button onClick={downloadImage}>
+              Download
+            </Button>
+            <Button onClick={resetAvatar}>
+              New Farmer
+            </Button>
+          </div>
+        </div>
+        <div className="mt-12 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-center w-full">
+            <div className="flex flex-col items-center justify-center w-48 h-80 rounded-lg bg-white dark:bg-neutral-950 dark:border-gray-600">
+              <div className="flex flex-col items-center justify-center pt-6 pb-6">
+                <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                  <img
+                    src={avatarUrl ? avatarUrl : "default-placeholder.jpg"}
+                    alt="Avatar"
+                    className="rounded-lg"
+                  />
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="mt-8 mx-auto max-w-2xl px-4 sm:px-6 lg:px-8">
         <Accordion type="single" collapsible>
           <AccordionItem value="item-1">
             <AccordionTrigger>Expert Mode</AccordionTrigger>
