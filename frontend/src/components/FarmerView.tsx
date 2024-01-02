@@ -1,5 +1,3 @@
-import React from "react";
-import Link from "next/link";
 import {
   Accordion,
   AccordionContent,
@@ -62,8 +60,18 @@ export default function FarmerView() {
             Here&apos;s your farmer!
           </h1>
           <div className="mt-4 grid grid-cols-2 gap-2">
-            <Button onClick={downloadImage}>Download</Button>
-            <Button onClick={resetAvatar}>New Farmer</Button>
+            <Button
+              data-umami-event="Download generated picture"
+              onClick={downloadImage}
+            >
+              Download
+            </Button>
+            <Button
+              data-umami-event="Go back to upload page"
+              onClick={resetAvatar}
+            >
+              New Farmer
+            </Button>
           </div>
         </div>
       </div>
@@ -73,8 +81,18 @@ export default function FarmerView() {
             Here&apos;s your farmer!
           </h1>
           <div className="mt-4 grid grid-cols-2 gap-2">
-            <Button onClick={downloadImage}>Download</Button>
-            <Button onClick={resetAvatar}>New Farmer</Button>
+            <Button
+              data-umami-event="Download generated picture"
+              onClick={downloadImage}
+            >
+              Download
+            </Button>
+            <Button
+              data-umami-event="Go back to upload page"
+              onClick={resetAvatar}
+            >
+              New Farmer
+            </Button>
           </div>
         </div>
         <div className="mt-12 sm:px-6 lg:px-8">
@@ -123,6 +141,7 @@ export default function FarmerView() {
                         });
                       }}
                       className="absolute right-4 bottom-4 py-1.5 px-3 bg-[#0a0a0a] text-white border border-zinc-300 dark:border-zinc-800 rounded-md hover:bg-zinc-900 transition-colors duration-150"
+                      data-umami-event="Copy expert mode data"
                     >
                       Copy
                     </button>

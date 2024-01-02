@@ -1,7 +1,7 @@
+import Head from "next/head";
+import Footer from "../components/Footer";
 import Header from "../components/Header";
 import Upload from "../components/Upload";
-import Footer from "../components/Footer";
-import Head from "next/head";
 
 export default function Index() {
   return (

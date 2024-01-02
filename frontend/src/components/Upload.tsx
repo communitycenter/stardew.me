@@ -1,33 +1,29 @@
 // @eslint-ignore next/next/no-img-element
 
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { useToast } from "@/components/ui/use-toast";
+import { useAvatarContext } from "@/lib/AvatarContext";
+import { useUploadContext } from "@/lib/UploadContext";
+import {
   ChangeEvent,
   MutableRefObject,
   useEffect,
   useRef,
   useState,
 } from "react";
-import BackgroundSelect from "./BackgroundSelect";
-import GenerateButton from "./GenerateButton";
+import { useMediaQuery } from "react-responsive";
 import { parseSaveFile } from "../../utils/parse";
-import { useToast } from "@/components/ui/use-toast";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { Player } from "../../utils/types/player.types";
-import { Skeleton } from "./ui/skeleton";
+import BackgroundSelect from "./BackgroundSelect";
 import FarmerView from "./FarmerView";
-import { useAvatarContext } from "@/lib/AvatarContext";
-import { useUploadContext } from "@/lib/UploadContext";
-import { useMediaQuery } from 'react-responsive';
-import { cn } from "@/lib/utils";
-import { Button } from "./ui/button";
-import { GetStaticProps } from "next";
+import GenerateButton from "./GenerateButton";
+import { Skeleton } from "./ui/skeleton";
 
 export default function Upload() {
   const { toast } = useToast();
@@ -40,7 +36,7 @@ export default function Upload() {
   const { isAvatar, setIsAvatar } = useAvatarContext();
   const { selectedFile, setSelectedFile } = useUploadContext();
   const [recent, setRecent] = useState<string[]>([]);
-  const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
+  const isMobile = useMediaQuery({ query: "(max-width: 767px)" });
 
   useEffect(() => {
     console.log(selectedPlayer);
@@ -207,6 +203,7 @@ export default function Upload() {
                 onChange={(e: ChangeEvent<HTMLInputElement>) =>
                   setSelectedFile(e.target.files ? e.target.files[0] : null)
                 }
+                data-umami-event="Upload save"
               />
             </label>
           </div>
@@ -227,11 +224,13 @@ export default function Upload() {
               <div className="mb-4 animate-spin rounded-full h-8 w-8 border-t-2 border-primary border-solid"></div>
             ) : (
               // Render the images when recent.length is greater than 0, and only render the first 5 images on mobile
-              recent.slice(0, isMobile ? 5 : recent.length).map((url, index) => (
-                <div key={url}>
-                  <img src={url} className={`h-24 rounded-md`} alt="Recent" />
-                </div>
-              ))
+              recent
+                .slice(0, isMobile ? 5 : recent.length)
+                .map((url, index) => (
+                  <div key={url}>
+                    <img src={url} className={`h-24 rounded-md`} alt="Recent" />
+                  </div>
+                ))
             )}
           </div>
         </div>

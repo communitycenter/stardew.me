@@ -1,22 +1,16 @@
 "use client";
 
-import * as React from "react";
 import { Check, ChevronDown } from "lucide-react";
+import * as React from "react";
 
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/ui/command";
+import { Command, CommandGroup, CommandItem } from "@/components/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 
 const backgrounds = [
   {
@@ -45,6 +39,7 @@ const ComboboxDemo: React.FC<ComboboxDemoProps> = ({ value, setValue }) => {
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
+          data-umami-event="Select background"
           variant="outline"
           role="combobox"
           aria-expanded={open}
