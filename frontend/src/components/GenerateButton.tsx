@@ -1,14 +1,14 @@
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 
 export default function GenerateButton() {
   return (
     <>
       <div className="hidden sm:block">
-        <Button>Generate Farmer</Button>
+        <Button data-umami-event="Generate farmer">Generate Farmer</Button>
       </div>
       <div className="block sm:hidden">
-        <Button>Generate</Button>
+        <Button data-umami-event="Generate farmer">Generate</Button>
       </div>
     </>
-  )
+  );
 }
