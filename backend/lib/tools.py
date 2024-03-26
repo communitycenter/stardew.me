@@ -29,12 +29,16 @@ def createPlayer(file):
     # -------------------------- check if player has hat ------------------------- #
     hat = None
     if doc["SaveGame"]["player"].get("hat"):
+        print(doc["SaveGame"]["player"]["hat"])
         hat = {
-            "type": int(doc["SaveGame"]["player"]["hat"]["which"]),
+            "type": int(doc["SaveGame"]["player"]["hat"]["itemId"]),
             "hairDrawType": int(doc["SaveGame"]["player"]["hat"]["hairDrawType"]),
-            "ignoreHairstyleOffset": True
-            if doc["SaveGame"]["player"]["hat"].get("ignoreHairstyleOffset") == "true"
-            else False,
+            "ignoreHairstyleOffset": (
+                True
+                if doc["SaveGame"]["player"]["hat"].get("ignoreHairstyleOffset")
+                == "true"
+                else False
+            ),
         }
 
     # ------------------------ check if player has a shirt ----------------------- #
@@ -47,9 +51,11 @@ def createPlayer(file):
         )
         shirt = {
             "type": int(doc["SaveGame"]["player"]["shirtItem"]["indexInTileSheet"]),
-            "dyeable": True
-            if doc["SaveGame"]["player"]["shirtItem"]["dyeable"] == "true"
-            else False,
+            "dyeable": (
+                True
+                if doc["SaveGame"]["player"]["shirtItem"]["dyeable"] == "true"
+                else False
+            ),
             "color": shirtColor,
         }
     else:  # default shirt
@@ -68,9 +74,11 @@ def createPlayer(file):
         )
         pants = {
             "type": int(doc["SaveGame"]["player"]["pantsItem"]["indexInTileSheet"]),
-            "dyeable": True
-            if doc["SaveGame"]["player"]["pantsItem"]["dyeable"] == "true"
-            else False,
+            "dyeable": (
+                True
+                if doc["SaveGame"]["player"]["pantsItem"]["dyeable"] == "true"
+                else False
+            ),
             "color": pantsColor,
         }
     else:  # default pants
