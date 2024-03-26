@@ -1,6 +1,7 @@
 import os
 import json
 import xmltodict
+import re
 
 from typing import Set
 
@@ -9,6 +10,9 @@ def createPlayer(file):
     # use xmltodict to parse the xml file into a dict
     with open(file) as fd:
         doc = xmltodict.parse(fd.read())
+
+    # ------------------------- get game version of save ------------------------ #
+    version = doc["SaveGame"]["gameVersion"]
 
     # for now we only care about some things so lets return a smaller object
     newEyeColor = doc["SaveGame"]["player"]["newEyeColor"]
@@ -29,9 +33,12 @@ def createPlayer(file):
     # -------------------------- check if player has hat ------------------------- #
     hat = None
     if doc["SaveGame"]["player"].get("hat"):
-        print(doc["SaveGame"]["player"]["hat"])
         hat = {
-            "type": int(doc["SaveGame"]["player"]["hat"]["itemId"]),
+            "type": (
+                int(doc["SaveGame"]["player"]["hat"]["itemId"])
+                if version >= "1.6.0"
+                else int(doc["SaveGame"]["player"]["hat"]["which"])
+            ),
             "hairDrawType": int(doc["SaveGame"]["player"]["hat"]["hairDrawType"]),
             "ignoreHairstyleOffset": (
                 True
@@ -108,16 +115,15 @@ def get_sleeveless_shirts() -> Set[int]:
     Returns:
         Set[int]: A set of shirt IDs that are sleeveless
     """
-    clothing_info_path = os.path.join("data", "ClothingInformation.json")
-    with open(clothing_info_path, "r") as f:
-        clothing_info = json.load(f)
+    shirts_path = os.path.join("data", "Shirts.json")
+
+    with open(shirts_path, "r") as f:
+        shirts_data = json.load(f)
 
     sleeveless_shirts = set()
 
-    for shirt_id, info in clothing_info.items():
-        info_split = info.split("/")
-
-        if len(info_split) >= 10 and info_split[9] == "Sleeveless":
+    for shirt_id, info in shirts_data.items():
+        if info["HasSleeves"] == False:
             sleeveless_shirts.add(int(shirt_id))
 
     return sleeveless_shirts
