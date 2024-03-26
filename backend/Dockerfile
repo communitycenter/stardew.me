@@ -11,7 +11,7 @@ COPY . .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Expose the port if your application runs on a specific port
-# EXPOSE 8000
+EXPOSE 80
 
 # Set the entry point for the container
 CMD ["python", "main.py"]
