@@ -43,8 +43,8 @@ interface RecentFarmhand {
 
 export async function getRecents(): Promise<RecentFarmhand[]> {
   const redis = new Redis({
-    url: "https://pet-skylark-48249.upstash.io",
-    token: "Arx5AAIgcDFWiruI6dLC8PeYjDvw_aMCyqCzNJln-mw1qPqDmzeTUw",
+    url: process.env.UPSTASH_REDIS_REST_URL,
+    token: process.env.UPSTASH_REDIS_REST_TOKEN,
   });
 
   const hashes = await redis.zrange<string[]>("recent_farmhands", 0, -1, {
