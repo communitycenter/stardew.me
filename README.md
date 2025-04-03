@@ -1,39 +1,36 @@
-<p align="center">
-    <img align=center src="https://stardew.me/assets/logo.png" alt="Stardew.me Logo" width="100" /></br>
-</p>
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-<p align="center">
-    <strong>stardew.me</strong></br>
-    <i>Highly efficient Stardew Valley 1.5 player sprite renderer API, built in Python</i>
-</p>
+## Getting Started
 
-# Overview
+First, run the development server:
 
-Stardew.me is a full-stack application (and RESTful API) that, upon being given a body of data from a Stardew Valley save file, will generate a 128x256 PNG file of the player. As it currently stands, stardew.me is the only player renderer capable of processing a version 1.5 Stardew Valley save.
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
 
-## How to use the API
-TBD.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Technical breakdown
-This Git repository is split into two different parts:
-- `backend/`: contains all the backend Python code
-- `frontend/` contains all the frontend Next.js code
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-### Backend: Python
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-Under the hood, the player renderer uses Python, as well as Python Image Library and Pillow to generate player sprites. We do this with a combination of a few things:
-- [Stardew Valley's player spritesheets](https://stardewvalley.net)
-- [Stardew Valley's background assets](https://stardewvalley.net)
-- [upload.farm's crop_image function (which was incredibly useful)](https://github.com/Sketchy502/SDV-Summary/blob/4f116374650998ddad7aa48713e2619df565e3b9/sdv/getSprite.py)
-- Lots of love
+## Learn More
 
-The renderer searches out for all of the assets, combines them into an image, upscales it, and uploads it into a Cloudflare R2 bucket for storage. Once uploaded, the API returns a Cloudflare R2 object URL that returns the image.
+To learn more about Next.js, take a look at the following resources:
 
-### Frontend: Next.js
-The frontend is composed of a stack of [Next.js](https://nextjs.org), [shadcn's UI kit](https://ui.shadcn.com), and [TailwindCSS](https://tailwindcss.com).
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-## Contributing guidelines
-TBD
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Self-hosting
-TBD
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
