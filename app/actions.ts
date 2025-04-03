@@ -18,7 +18,7 @@ export async function uploadSaveFile(players: Player[]) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-api-key": "JzMIh4isUb6gx3vgp7cTU3JlIoZDAxTU9lLutev0",
+        "x-api-key": process.env.DEV_KEY!,
       },
       body: JSON.stringify(playerData),
     });
